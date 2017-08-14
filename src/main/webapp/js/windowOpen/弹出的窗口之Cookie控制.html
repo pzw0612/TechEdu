@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function openwin() {
+		window.open("page.html", "", "width=200,height=200")
+	}
+	function get_cookie(Name) {
+		var search = Name + "="
+		var returnvalue = "";
+		if (document.cookie.length > 0) {
+			offset = document.cookie.indexOf(search)
+			if (offset != -1) {
+				offset += search.length
+				end = document.cookie.indexOf(";", offset);
+				if (end == -1)
+					end = document.cookie.length;
+				returnvalue = unescape(document.cookie.substring(offset, end))
+			}
+		}
+		return returnvalue;
+	}
+	function loadpopup() {
+		if (get_cookie('popped') == '') {
+			openwin()
+			document.cookie = "popped=yes"
+		}
+	}
+</script>
+</head>
+<body onload="loadpopup()">
+
+</body>
+</html>

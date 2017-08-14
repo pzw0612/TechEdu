@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<input type="text"name="username">
+
+<input type="text" name="sex">
+
+<input type="button"value="Post">
+
+<script type="text/javascript" >
+
+function Post()
+
+{
+
+　　//单个值 Read.htm?username=baobao;
+
+　　//多全值 Read.htm?username=baobao&sex=male;
+
+　　url= "Read.htm?username="+escape(document.all.username.value);
+
+　　url+= "&sex=" + escape(document.all.sex.value);
+
+　　location.href=url;
+
+}
+
+</script>
+</body>
+</html>

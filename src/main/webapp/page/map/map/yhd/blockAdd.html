@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>添加block</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://webapi.amap.com/maps?v=1.3&key=f20db5501b07e183ffcdb560cf0ab801&plugin=AMap.MouseTool,AMap.PolyEditor"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div class="button-group">
+
+    <input type="button" class="button" value="添加block" id="addPolygon"/>
+    <input type="button" class="button" value="删除block" id="deletePolygon"/>
+    <input type="button" class="button" value="编辑开始block" id="editPolygon"/>
+    <input type="button" class="button" value="编辑结束block" id="editEndPolygon"/>
+    
+</div>
+<script>
+
+  
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });	
+    //在地图中添加MouseTool插件
+    var mouseTool = new AMap.MouseTool(map);
+    var seed =0;
+    var feature,lnglat;
+    var editor={};
+    var features = [];
+    
+    function  fnBeginDrawFeature(){
+			if(mouseTool.__drawListener){
+				mouseTool.close();
+				AMap.event.removeListener(mouseTool.__drawListener);
+			}
+			mouseTool.polygon();
+			mouseTool.__drawListener = AMap.event.addListener(mouseTool, "draw", fnAfterDrawFeature);
+	} 
+    function  fnAfterDrawFeature(e){
+			feature = e.obj;
+			feature.__id = seed;
+			if(feature instanceof AMap.Polygon){
+				lnglat = feature.getPath();
+				lnglat = lnglat[lnglat.length -1];
+			}
+			else{ throw Error("现在还不支持。");}
+			AMap.event.removeListener(mouseTool.__drawListener);
+			mouseTool.__drawListener = null;
+			mouseTool.close();
+			
+			features.push(feature);
+			seed++;
+			if(features.length > 0){
+				document.getElementById('deletePolygon').disabled  = false;
+			}
+			
+			map.panTo(lnglat);
+	}
+   //给div绑定单击事件
+   AMap.event.addDomListener(document.getElementById('addPolygon'), 'click', fnBeginDrawFeature, false);
+   
+   function  fnDeleteBlock(){
+	    seed--
+	    feature = features.pop();
+		feature.setMap(null);
+	    if(features.length==0){
+	    	document.getElementById('deletePolygon').disabled  = true;
+	    }
+   }
+   AMap.event.addDomListener(document.getElementById('deletePolygon'), 'click', fnDeleteBlock, false);
+   
+  
+   function  fnStartEditBlock(){
+	    feature = features.pop();
+		if(editor._polygonEditor){
+			editor._polygonEditor.close();
+		}
+		
+		editor._polygon=(function(){
+	        return feature;
+	    })();
+
+		editor._polygonEditor= new AMap.PolyEditor(map, editor._polygon);
+		
+		editor._polygonEditor.open();
+		
+		//editor.__drawListener = AMap.event.addListener(editor._polygonEditor, "draw", fnEndEditBlock);
+		
+		feature.on('rightclick', function() {
+			editor._polygonEditor.close();
+			console.log("path=" + feature.getPath())
+			features.push(feature);
+	    });
+		console.log("path=" + feature.getPath())
+   }
+   AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', fnStartEditBlock, false); 
+   
+   function  fnEndEditBlock(e){
+// 		feature = e.obj;
+// 		feature.__id = seed;
+// 		if(feature instanceof AMap.Polygon){
+// 			lnglat = feature.getPath();
+// 			lnglat = lnglat[lnglat.length -1];
+// 		}
+// 		else{ throw Error("现在还不支持。");}
+// 		AMap.event.removeListener(editor.__drawListener);
+// 		editor.__drawListener = null;
+		editor._polygonEditor.close();
+		
+		features.push(feature);
+		console.log("path=" + feature.getPath())
+// 		features.push(feature);
+		
+// 		seed++;
+		
+// 		if(features.length > 0){
+// 			document.getElementById('deletePolygon').disabled  = false;
+// 		}
+// 		map.panTo(lnglat);
+   }
+   
+   AMap.event.addDomListener(document.getElementById('editEndPolygon'), 'click', fnEndEditBlock, false); 
+   
+</script>
+</body>
+</html>

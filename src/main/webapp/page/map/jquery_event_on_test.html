@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>on demo</title>
+    <style>
+        p {
+        background: yellow;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px;
+        }
+        p.over {
+        background: #ccc;
+        }
+        span {
+        color: red;
+        }
+    </style>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+<div>
+    <p>Click me!</p>
+    <p>Click me2!</p>
+    <span></span>
+</div>
+<script>
+var count = 0;
+$("div").on( "click", "p", function() {
+  $( this ).after( "<p>Another paragraph! " + (++count) + "</p>" );
+});
+</script>
+
+</body>
+</html>

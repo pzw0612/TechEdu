@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http:///TR/xhtml1/DTD/xhtml1-transition al.dtd">
+
+<html xmlns="http:///1999/xhtml">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>父窗体</title>
+
+<script language="javascript" type="text/javascript">
+	function OpenWindow() {
+
+		window.open('son.html');
+
+	}
+
+	function setValue(m_strValue) {
+
+		document.getElementById("txt_Value").value = m_strValue;
+
+	}
+</script>
+
+</head>
+
+<body>
+
+	<form id="form1" name="form1" method="post" action="">
+
+		<label> <input type="text" name="txt_Value" id="txt_Value" />
+
+		</label> <label> <input type="button" name="btn_ShowClose"
+			id="btn_ShowClose" value="按钮" onclick="OpenWindow();" />
+
+		</label>
+
+	</form>
+
+</body>
+
+</html>

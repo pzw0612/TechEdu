@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://com.yhd.shareservice/autoclear/writemethod" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://com.yhd.shareservice/autoclear/writemethod" 
+    elementFormDefault="unqualified">
+   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  
+   
+	<xsd:element name="writeMethods">
+			<xsd:complexType>
+				   <xsd:sequence>
+				       <xsd:element ref="writeMethod" minOccurs="1" maxOccurs="unbounded"/>
+				   </xsd:sequence>
+			</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="writeMethod">
+		<xsd:complexType >
+			<xsd:sequence>
+	              <xsd:element ref="className"></xsd:element>
+	              <xsd:element ref="methodName" ></xsd:element>
+	              <xsd:element ref="table" ></xsd:element>
+	              <xsd:element  ref="setFields" minOccurs="0" maxOccurs="1"></xsd:element>
+	              <xsd:element  ref="whereFields" minOccurs="0" maxOccurs="1"></xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="setFields">
+                <xsd:complexType>
+                     <xsd:sequence>
+                           <xsd:element ref="field" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                     </xsd:sequence>
+                </xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="whereFields">
+                <xsd:complexType>
+                     <xsd:sequence>
+                           <xsd:element ref="field" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                     </xsd:sequence>
+                </xsd:complexType>
+	</xsd:element>
+	
+	 <xsd:element name="field" >
+	     <xsd:complexType>
+	          <xsd:attributeGroup ref="fieldAttrGrop"></xsd:attributeGroup>
+	     </xsd:complexType>
+	 </xsd:element>
+	
+	<xsd:attributeGroup name="fieldAttrGrop">
+	       <xsd:attribute name="name" type="xsd:string" use="optional"></xsd:attribute>
+           <xsd:attribute name="column" type="xsd:string" use="required"></xsd:attribute>
+           <xsd:attribute name="table" type="xsd:string" use="optional"></xsd:attribute>
+           <xsd:attribute name="defaultValue" type="xsd:string" use="optional"></xsd:attribute>
+	</xsd:attributeGroup>
+	
+   <xsd:element name="className">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+   <xsd:element name="methodName">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+   <xsd:element name="table">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

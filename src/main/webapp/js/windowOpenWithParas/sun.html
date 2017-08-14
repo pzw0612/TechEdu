@@ -1,0 +1,19 @@
+<!DOCTYPE>
+<HTML>
+<HEAD>
+  <meta charset="utf-8">
+  <TITLE> Page B </TITLE>
+  <script type="text/javascript">
+function colseWin(){
+  var returnValue = document.getElementById("mytext").value.trim;
+  window.returnValue=returnValue;
+  window.close();
+}
+  </script>
+</HEAD>
+
+<BODY>
+     <input type="text" id="mytext">
+  <input type="button" value="保存并关闭" onclick="colseWin();">
+</BODY>
+</HTML>

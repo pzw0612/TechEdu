@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<writeKeysPairs xmlns="http://com.yhd.shareservice/autoclear/keyspair"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://com.yhd.shareservice/autoclear/keyspair 
+        http://com.yhd.shareservice/autoclear/keyspair/keys_pair.xsd"> 
+        
+   <!-- 使用直接清理缓存策略 -->
+   <writeKeysPair>
+       <className>aa</className>
+       <methodName>bb</methodName>
+       <associatedKeys>
+         <associatedKey keyId="cc" clearCacheStrategy="directlyRemove"/>
+       </associatedKeys>
+   </writeKeysPair>
+   
+   <!-- 使用升级版本缓存策略 -->
+   <writeKeysPair>
+       <className>aa1</className>
+       <methodName>bb1</methodName>
+       <associatedKeys>
+         <associatedKey keyId="cc" clearCacheStrategy="updateKeyVersion"/>
+       </associatedKeys>
+   </writeKeysPair>
+
+   <!-- 使用直接清理、升级版本缓存策略 -->
+   <writeKeysPair>
+       <className>aa2</className>
+       <methodName>bb2</methodName>
+       <associatedKeys>
+         <associatedKey keyId="cc" clearCacheStrategy="updateKeyVersion"/>
+         <associatedKey keyId="cc2" clearCacheStrategy="directlyRemove"/>
+       </associatedKeys>
+   </writeKeysPair>
+   
+   <!-- 使用直接清理、升级版本缓存策略, 检索方式为 sql -->
+   <writeKeysPair>
+       <className>aa3</className>
+       <methodName>bb3</methodName>
+       <associatedKeys>
+			<associatedKey keyId="cc" affectedArgument="aa1,aa2,aa3" clearCacheStrategy="directlyRemove">
+			    <argumentRetrieval type="sql">
+			        <sqlMapClient>pssClient</sqlMapClient>
+			        <iBATISId>sqlStatementId</iBATISId>
+			    </argumentRetrieval>
+			</associatedKey>
+			<associatedKey keyId="cc2" />
+       </associatedKeys>
+   </writeKeysPair>
+   
+   <!-- 使用直接清理、升级版本缓存策略, 检索方式为 code -->
+   <writeKeysPair>
+       <className>aa4</className>
+       <methodName>bb4</methodName>
+       <associatedKeys>
+			<associatedKey keyId="cc" affectedArgument="aa1,aa2,aa3" clearCacheStrategy="directlyRemove">
+			    <argumentRetrieval type="code">
+			        <sqlMapClient>pssClient</sqlMapClient>
+			    </argumentRetrieval>
+			</associatedKey>
+			<associatedKey keyId="cc2" />
+       </associatedKeys>
+   </writeKeysPair>
+   
+</writeKeysPairs>

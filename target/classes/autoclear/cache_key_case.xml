@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cacheKeys xmlns="http://com.yhd.shareservice/autoclear/cachekey"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+        xsi:schemaLocation="http://com.yhd.shareservice/autoclear/cachekey 
+             http://com.yhd.shareservice/autoclear/cachekey/cache_key.xsd"  
+        version="1.0" namespace="pss"> 
+     
+     <!-- 有values, 有版本升级字段 ,参数filed1 为 name 版本类型-->
+     <!-- pss_aa0_filed1_v1_%1%_filed2_%2% -->
+     <cacheKey id="aa0" >
+          <argument name="filed1" column="FIELD1" table="TEST" isUseNameVersion="true" />
+          <argument name="filed2" column="FIELD2" table="TEST"  />
+          <values>
+              <value column="filed1" table="TEST"/>
+              <value column="filed2" table="TEST"/>
+              <value column="filed3" table="TEST"/>
+              <value column="filed4" table="TEST"/>
+          </values>
+     </cacheKey>
+     
+     <!-- 有values, 无版本升级字段 -->
+     <!-- pss_queryFieldxx_filed1_%1%_filed2_%2% -->
+     <cacheKey id="aa" prefix="queryFieldxx">
+          <argument name="filed1" column="FIELD1" table="TEST" />
+          <argument name="filed2" column="FIELD2" table="TEST"  />
+          <values>
+              <value column="filed1" table="TEST"/>
+              <value column="filed2" table="TEST"/>
+              <value column="filed3" table="TEST"/>
+              <value column="filed4" table="TEST"/>
+          </values>
+     </cacheKey>
+     
+     <!-- 有values, 有版本升级字段 ,参数filed1 为 name 版本类型-->
+     <!-- pss_queryFieldxx_filed1_v1_%1%_filed2_%2% -->
+     <cacheKey id="aa1" prefix="queryFieldxx">
+          <argument name="filed1" column="FIELD1" table="TEST" isUseNameVersion="true" />
+          <argument name="filed2" column="FIELD2" table="TEST"  />
+          <values>
+              <value column="filed1" table="TEST"/>
+              <value column="filed2" table="TEST"/>
+              <value column="filed3" table="TEST"/>
+              <value column="filed4" table="TEST"/>
+          </values>
+     </cacheKey>
+     
+     <!-- 无values -->
+     <!-- pss_queryFieldxx_filed1_%1% -->
+     <cacheKey id="aa2" prefix="queryFieldxx">
+          <argument name="filed1" column="FIELD1" table="TEST"/>
+     </cacheKey>
+     
+     <!-- 无values ，有版本升级字段 ，参数filed1 为 value 版本类型-->
+     <!-- pss_queryFieldxx_filed1_%1%_v1 -->
+     <cacheKey id="aa3" prefix="queryFieldxx">
+          <argument name="filed1" column="FIELD1" table="TEST" isUseValueVersion="true"/>
+     </cacheKey>
+     
+     <!-- 无values ，有版本升级字段 ，参数filed1 为 name 版本类型-->
+     <!-- pss_queryFieldxx_filed1_v1_%1% -->
+     <cacheKey id="aa4" prefix="queryFieldxx">
+          <argument name="filed1" column="FIELD1" table="TEST" isUseNameVersion="true"/>
+     </cacheKey>
+     
+     <!-- 无values ，有版本升级字段 ，参数filed 为 name 版本类型,无前缀prex-->
+     <!-- pss_aa5_filed1_%1% -->
+     <cacheKey id="aa5" >
+          <argument name="filed1" column="FIELD1" table="TEST" isUseNameVersion="true"/>
+     </cacheKey>
+    
+     <cacheKey id="aa6" >
+          <argument name="filed1" column="FIELD1" table="TEST" isUseNameVersion="true"/>
+          <values>
+              <value column="" table=""/>
+              <value column="" table=""/>
+              <value column="" table=""/>
+              <value column="" table=""/>
+          </values>
+     </cacheKey>
+</cacheKeys>

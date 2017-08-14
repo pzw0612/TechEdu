@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<writeMethods xmlns="http://com.yhd.shareservice/autoclear/writemethod"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://com.yhd.shareservice/autoclear/writemethod 
+        http://com.yhd.shareservice/autoclear/writemethod/write_method.xsd"> 
+     
+      <writeMethod>
+          <className>aaa</className>
+          <methodName>bb</methodName>
+          <table>cc</table>
+          <setFields>
+             <field name="aa" column="aa"/>
+             <field name="bb" column="bb"/>
+          </setFields>
+          <whereFields>
+             <field name="aa" column="aa"/>
+          </whereFields>
+      </writeMethod>
+      
+      
+      
+   <writeMethod>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>updateMerchant</methodName>
+       <table>Merchant</table>
+       <setFields>
+			<field column="UPDATE_TIME" defaultValue="sysdate"/>
+			<field column="MERCHANT_NAME" name="merchantName"/>
+			<field column="MERCHANT_PASSWORD" name="merchantPassword"/>
+			<field column="MERCHANT_COMPANY_NAME" name="merchantCompanyName"/>
+			<field column="MERCHANT_TRADING_VOLUME" name="merchantTradingVolume"/>
+			<field column="MERCHANT_CATEGORY" name="merchantCategory"/>
+			<field column="MERCHANT_PIC_ID" name="merchantPicId"/>
+			<field column="MERCHANT_LOGIN_TIMES" name="merchantLoginTimes"/>
+			<field column="MERCHANT_LAST_LOGIN_DATE" name="merchantLastLoginDate"/>
+			<field column="IS_CARGO_OWNER" name="isCargoOwner"/>
+			<field column="SUPPLIER_ID" name="supplierId"/>
+			<field column="LINKMAN_EMAIL" name="linkmanEmail"/>
+			<field column="LINKMAN_TEL" name="linkmanTel"/>
+			<field column="LINKMAN_NAME" name="linkmanName"/>
+			<field column="MERCHANT_GROUP" name="merchantGroup"/>
+			<field column="OP_C_DEPNAME" name="opCDepname"/>
+			<field column="OP_C_DEPID" name="opCDepid"/>
+			<field column="OP_C_NAME" name="opCName"/>
+			<field column="OP_C_ID" name="opCId"/>
+			<field column="STATUS_NAME" name="statusName"/>
+			<field column="STATUS_ID" name="statusId"/>
+			<field column="SOURCE_NAME" name="sourceName"/>
+			<field column="SOURCE_ID" name="sourceId"/>
+			<field column="MERCHANT_CODE" name="merchantCode"/>
+			<field column="MERCHANT_STATUS" name="merchantStatus"/>
+			<field column="RESPONSIBLE_OPID" name="responsibleOpid"/>
+			<field column="RESPONSIBLE_OPNAME" name="responsibleOpname"/>
+			<field column="CORPORATE" name="corporate"/>
+			<field column="CAPITAL" name="capital"/>
+			<field column="EMPLOYEE_NUM" name="employeeNum"/>
+			<field column="ORGANISE_NUM" name="organiseNum"/>
+			<field column="CHARTER_NUM" name="charterNum"/>
+			<field column="INVOICE_TYPE" name="invoiceType"/>
+			<field column="NOTE" name="note"/>
+			<field column="AUDITING_TIME" name="auditingTime"/>
+			<field column="UPDATE_USERID" name="updateUserid"/>
+			<field column="UPDATE_USERNAME" name="updateUsername"/>
+			<field column="AUDITING_USERID" name="auditingUserid"/>
+			<field column="AUDITING_USERNAME" name="auditingUsername"/>
+			<field column="AUDITING_DEPID" name="auditingDepid"/>
+			<field column="UPDATE_DEPID" name="updateDepid"/>
+			<field column="MERCHANT_GROUPID" name="merchantGroupid"/>
+			<field column="USERGROUP_ID" name="usergroupId"/>
+			<field column="RESPONSIBLE_DEPNAME" name="responsibleDepname"/>
+			<field column="RESPONSIBLE_DEPID" name="responsibleDepid"/>
+			<field column="BOR_ID" name="borId"/>
+			<field column="CITI_ID" name="citiId"/>
+			<field column="PRO_ID" name="proId"/>
+			<field column="MERCHANT_ADD" name="merchantAdd"/>
+			<field column="LINKMAN_FAX" name="linkmanFax"/>
+			<field column="LINKMAN_MO" name="linkmanMo"/>
+			<field column="START_TIME" name="startTime"/>
+			<field column="END_TIME" name="endTime"/>
+			<field column="MERCHANT_NAME_EN" name="merchantNameEn"/>
+			<field column="MERCHANT_WEB_ADDS" name="merchantWebAdds"/>
+			<field column="MERCHANT_POSTCODE" name="merchantPostcode"/>
+			<field column="GAINTYPE" name="gaintype"/>
+			<field column="IS_YIHAODIAN" name="isYihaodian"/>
+			<field column="LOGISTIC_CUTOFF_TIME" name="logisticCutoffTime"/>
+			<field column="FETCH_TIME" name="fetchTime"/>
+			<field column="FETCH_PROVINCE_ID" name="fetchProvinceId"/>
+			<field column="FETCH_CITY_ID" name="fetchCityId"/>
+			<field column="FETCH_COUNTY_ID" name="fetchCountyId"/>
+			<field column="FETCH_DETAIL_ADDRESS" name="fetchDetailAddress"/>
+			<field column="SUPPORT_SALE_TYPE" name="supportSaleType"/>
+			<field column="IS_DELETE" name="isDelete"/>
+			<field column="RUN_TYPE" name="runType"/>
+			<field column="FAIL_REASON" name="failReason"/>
+			<field column="CREDIT_INIT" name="creditInit"/>
+			<field column="VALIDATE_TIME" name="validateTime"/>
+			<field column="STORE_TYPE_ID" name="storeTypeId"/>
+			<field column="IS_SUPPORT_CONTRACT" name="isSupportContract"/>
+			<field column="LOGO_URL" name="logoUrl"/>
+			<field column="IS_SENT" name="isSent" defaultValue="0"/>
+			<field column="DATA_EXCHANGE_FLAG" name="dataExchangeFlag"/>
+			<field column="IS_TRANSFER_INCOME" name="isTransferIncome"/>
+			<field column="INVOICE_SEND_TYPE" name="invoiceSendType"/>
+			<field column="IS_PROXY_INVOICE" name="isProxyInvoice"/>
+			<field column="SBY_TYPE" name="sbyType"/>
+			<field column="MERCHANT_SOURCE" name="merchantSource"/>
+			<field column="MERCHANT_SERVICE_TEL" name="merchantServiceTel"/>
+       </setFields>
+       <whereFields>
+           <field name="id" column="id"/>
+           <field name="isDeleteCondition" column="is_delete"/>
+       </whereFields>
+   </writeMethod>
+   <writeMethod>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>deleteMerchantAreaByMerchantId</methodName>
+       <table>MERCHANT_AREA</table>
+       <whereFields>
+           <field name="id" column="MERCHANT_ID"/>
+       </whereFields>
+   </writeMethod>
+   <writeMethod>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>insertMerchantArea</methodName>
+       <table>MERCHANT_AREA</table>
+       <whereFields>
+           <field name="merchantArea.merchantId" column="MERCHANT_ID"/>
+       </whereFields>
+   </writeMethod>
+   
+</writeMethods>

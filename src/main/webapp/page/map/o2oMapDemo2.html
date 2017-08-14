@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta property="wb:webmaster" content="5195886dc3a637ba" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>O2O地图切割demo</title>
+
+    <link rel="profile" href="http://gmpg.org/xfn/11" />
+    <link rel="shortcut icon" href="http://lbs.amap.com/wp-content/themes/apiwebsite/images/favicon.ico?t=2015" />
+    <link rel="stylesheet" type="text/css" media="all" href="http://lbs.amap.com/wp-content/themes/apiwebsite/css/extra.min.css" />
+    <script type="text/javascript" src="http://lbs.amap.com/wp-content/themes/apiwebsite/js/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://lbs.amap.com/console/public/fancybox/source/jquery.fancybox.css" media="screen" />
+
+    <link rel="stylesheet" type="text/css" media="all" href="http://lbs.amap.com/wp-content/themes/apiwebsite/style.css?v=ONLINE_VERSION" />
+
+</head>
+
+<body>
+
+<a name="top"></a>
+
+<header>
+
+    <a id="logo" href="http://lbs.amap.com/" ></a>
+
+    <div class="menu_right">
+        <div id="login" class="login_wrapper logged">
+            <a href="http://id.amap.com/user" id="account" target="_blank"></a>
+
+            <div class="user_tip">
+                <a class="login_dev_info" href="http://lbs.amap.com/console/dev">开发者信息</a>
+                <a class="login_logout" href="javascript:;" onclick="oLoginMod.logout();">退出登录</a>
+            </div><!-- /.user_tip -->
+        </div><!-- /#login -->
+
+        <div id="not_logged" class="login_wrapper not_logged">
+
+            <a id="login_a" class="member_link" data-site="http://id.amap.com" target="_blank" href="http://id.amap.com?type=spa&ref=http://lbs.amap.com/"></a>
+        </div>
+
+        <a href="/console/dev" id="login_be_dev" class="login_be_dev" target="_blank" onclick="_czc.push(['_trackEvent', '导航栏', '点击', '成为开发者','1','login_be_dev']);">成为开发者</a>
+
+        <a class="login_console" href="http://lbs.amap.com/console/"></a>
+    </div><!-- /.menu_right -->
+
+
+    <ul class="nav nav_normal">
+    </ul>
+
+
+</header><!-- header -->
+
+<div class="page_wrapper">
+
+    <link rel='stylesheet' type='text/css' href='http://lbs.amap.com/console/public/console.css?t=20151105' media='all'>
+    <div class="main_content">
+        <style>/*
+            * CSS Styles that are needed by jScrollPane for it to operate correctly.
+            *
+            * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+            * may not operate correctly without them.
+            */
+
+            .jspContainer
+            {
+            overflow: hidden;
+            position: relative;
+            }
+
+            .jspPane
+            {
+            position: absolute;
+            }
+            /* 删除焦点状态蓝色边框 */
+            .jspScrollable:focus{ outline: none; }
+            .jspVerticalBar
+            {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;/*width: 16px;*/
+            height: 100%;
+            background: red;
+            }
+
+            .jspHorizontalBar
+            {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 16px;
+            background: red;
+            }
+
+            .jspCap
+            {
+            display: none;
+            }
+
+            .jspHorizontalBar .jspCap
+            {
+            float: left;
+            }
+
+            .jspTrack
+            {
+            background:#F9F9F9;
+            /*background: #dde;*/
+            position: relative;
+            }
+
+            .jspDrag
+            {
+            background: #EEE;
+            /*background: #bbd;*/
+            position: relative;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            }
+
+            .jspHorizontalBar .jspTrack,
+            .jspHorizontalBar .jspDrag
+            {
+            float: left;
+            height: 100%;
+            }
+
+            .jspArrow
+            {
+            background: #50506d;
+            text-indent: -20000px;
+            display: block;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            }
+
+            .jspArrow.jspDisabled
+            {
+            cursor: default;
+            background: #80808d;
+            }
+
+            .jspVerticalBar .jspArrow
+            {
+            height: 16px;
+            }
+
+            .jspHorizontalBar .jspArrow
+            {
+            width: 16px;
+            float: left;
+            height: 100%;
+            }
+
+            .jspVerticalBar .jspArrow:focus
+            {
+            outline: none;
+            }
+
+            .jspCorner
+            {
+            background: #eeeef4;
+            float: left;
+            height: 100%;
+            }
+
+            /* Yuk! CSS Hack for IE6 3 pixel bug :( */
+            * html .jspCorner
+            {
+            margin: 0 -3px 0 0;
+            }</style>
+
+        <style>
+            #wrapper { margin: 0 auto; font-size:12px; }
+            #wrapper *{
+            box-sizing: content-box;
+            }
+            #bSideLeft, #bSideRight { float: left; width: 324px; height: 645px; border: 1px solid #E0EDF4; background-color: #FFF; }
+            #bSideRight { float: right; width: 602px; height: 602px; overflow: auto; position: relative; padding:20px 15px; }
+
+            .clear { clear: both; float: none; font-size: 0; height: 0; }
+            .hide { display: none !important; }
+            .clearfix { *zoom: 1; }
+            .clearfix:before, .clearfix:after { display: table; line-height: 0; content: ""; }
+            .clearfix:after { clear: both; }
+            .pull-left { float: left; }
+            .pull-right { float: right; }
+
+            /* 定位地点，地图样式，添加标注 3个按钮 */
+            #navTabs { margin: 0; padding: 0; list-style: none; height: 53px; overflow: hidden; background-color: #F7F7F7 }
+            #navTabs li { list-style: none; width: 33.334%; float: left; }
+            #navTabs li a { display: block; height: 51px; line-height: 51px; border: 1px solid #E6E6E6; border-left-width: 0; padding-left: 13px; text-align: center; text-decoration: none;; color: #000; background: url(/console/public/show/bg.32.png) -403px 19px no-repeat; }
+            #navTabs li a.step2 { background-position: -403px -31px; }
+            #navTabs li a.step3 { background-position: -403px -82px; }
+            #navTabs li a.selected { border-bottom-color: #FFF; background-color: #FFF; }
+            #navTabs li a:hover, #navTabs li a:focus { background-color: #FFF; }
+
+            #leftContent { padding: 9px 15px 0; /*height: 557px;*/ /* 645 - 53 - 20 - 15 */ }
+            #leftContent label{ margin:0; }
+
+            /* 地图样式 设置相关内容 */
+            table.map-style { width: 100%; border-collapse: collapse; }
+            table.map-style th, table.map-style td { border-bottom: 1px solid #EEE; padding: 7px 0 8px;  }
+            table.map-style tr.first-child th, table.map-style tr.first-child td { padding-top: 0; }
+            table.map-style tr:last-child th, table.map-style tr:last-child td {border-bottom: none;}
+            table.map-style input { margin: 0 5px 0 0; }
+            table.map-style input[type=radio], table.map-style input[type=checkbox] { vertical-align: -3px; }
+            table.map-style th { width: 80px; vertical-align: middle; }
+
+            table.map-style th div { height: 20px; width: 60px; padding-top: 50px; text-align: center; color: #0075C2; font-weight: normal; background: url(/console/public/show/bg.32.png) -172px 0 no-repeat; }
+            table.map-style td div { padding: 2px 0; color: #333; position: relative; *padding:1px 0;
+            /* IE6-7 radio,checkbox 20*20px; 其他浏览器 13*13px;; */}
+            table.map-style td h6 { color: #000; font-weight: bold; font-size: 12px; display: inline-block; width: 30px; margin: 1px 2px; *display: inline; }
+            table.map-style .fixed-label-width label { width: 80px; display: inline-block;  }
+            table.map-style .map-layer-bg{ font-size: 0; padding-bottom: 8px; }
+            table.map-style .map-layer-bg label { padding: 0 30px; display: inline-block; height: 26px; line-height: 26px; border:1px solid #ccc;overflow: hidden; font-size:12px; }
+            table.map-style .map-layer-bg label.selected { border-bottom-color: #FFF; }
+            table.map-style .map-layer-bg label.first-child { border-right-width: 0; }
+            table.map-style .map-layer-bg input{ position:absolute; top: -1000px; left:-1000px; /* firefox width:0 无效, display:none 在IE6-7-8 下无法响应点击事件 */ }
+            table.map-style tr.map-size input[type=text] { width: 40px; }
+            table.map-style tr.map-status th div { background-position: -112px 0; }
+            table.map-style tr.map-view th div { background-position: 8px -96px; }
+            table.map-style tr.map-scale th div { background-position: -54px -96px; }
+            table.map-style tr.map-layer th div { background-position: 8px 8px; }
+            table.map-style tr.map-toolbar th div{ background-position: -46px 2px; }
+
+            #msg3dInfo{ position: absolute; font-size:12px; color:red; top:14px; left: 18px; }
+
+            /* 选择添加 点，线，面 */
+            #addOverlayTypes { padding: 15px 0; overflow: hidden; white-space: nowrap; border-bottom: 1px solid #E0E0E0; }
+            #addOverlayTypes a { width: 56px; height: 56px; display: inline-block; border: 1px #E0E0E0 solid; margin: 0 18px;
+            background: url(bg.32.png) -226px 6px no-repeat #F7F7F7; }
+            #addOverlayTypes a.overlay-polyline { background-position: -294px 5px; }
+            #addOverlayTypes a.overlay-polygon { background-position: -352px 8px; }
+            #addOverlayTypes a.select { background-color: #F5F5F5; border: 2px solid #7CA7E6; }
+            #addOverlayTypes a:hover { background-color: #E0E0E0; }
+
+            /* 地图标点 相关 */
+            #mapContainer { width: 600px; height: 600px; border: 1px #DDD solid; margin: 0 auto; position: relative; }
+            #mapContainer .marker { background: url(/console/public/show/marker.png) no-repeat; cursor: pointer; }
+            #mapContainer .marker-cir { height: 31px; width: 28px; }
+            #mapContainer .marker-cir-red { background-position: -11px -5px; }
+            #mapContainer .marker-cir-blue { background-position: -11px -55px; }
+            #mapContainer .marker-cir-yellow { background-position: -11px -105px; }
+            #mapContainer .marker-cir-green { background-position: -11px -155px; }
+            #mapContainer .marker-cir-gray { background-position: -11px -205px; }
+            #mapContainer .marker-flg { height: 32px; width: 29px; }
+            #mapContainer .marker-flg-red { background-position: -65px -5px; }
+            #mapContainer .marker-flg-blue { background-position: -65px -55px; }
+            #mapContainer .marker-flg-yellow { background-position: -65px -105px; }
+            #mapContainer .marker-flg-green { background-position: -65px -155px; }
+            #mapContainer .marker-flg-gray { background-position: -65px -205px; }
+            #mapContainer .marker-anc { height: 28px; width: 26px; }
+            #mapContainer .marker-anc-red { background-position: -132px -7px; }
+            #mapContainer .marker-anc-blue { background-position: -132px -57px; }
+            #mapContainer .marker-anc-yellow { background-position: -132px -107px; }
+            #mapContainer .marker-anc-green { background-position: -132px -157px; }
+            #mapContainer .marker-anc-gray { background-position: -132px -207px; }
+            #mapContainer .marker-twig { width: 27px; height: 30px; }
+            #mapContainer .marker-twig-red { background-position: -187px -7px; }
+            #mapContainer .marker-twig-blue { background-position: -187px -57px; }
+            #mapContainer .marker-twig-yellow { background-position: -187px -107px; }
+            #mapContainer .marker-twig-green { background-position: -187px -157px; }
+            #mapContainer .marker-twig-gray { background-position: -187px -207px; }
+            #mapContainer .marker-pot { width: 23px; height: 31px; }
+            #mapContainer .marker-pot-red { background-position: -234px -5px; }
+            #mapContainer .marker-pot-blue { background-position: -234px -55px; }
+            #mapContainer .marker-pot-yellow { background-position: -234px -105px; }
+            #mapContainer .marker-pot-green { background-position: -234px -155px; }
+            #mapContainer .marker-pot-gray { background-position: -234px -205px; }
+
+            /* InfoWindow 弹框内容 */
+            #iwWrap { width: 280px; min-height: 40px; }
+            #iwWrap .iw-title { height: 20px; line-height: 20px; overflow: hidden; font-weight: bold; text-overflow: ellipsis; word-break: break-all; word-wrap: break-word; white-space: nowrap; }
+            #iwWrap .iw-content { min-height: 20px; line-height: 20px; }
+
+            /* 导出代码，显示源代码 */
+            .modal-backdrop { position: fixed; _position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;
+            background-color: #000; opacity: 0.25; filter: alpha(opacity=25); }
+            .modal-dialog { position: fixed; z-index: 2000; border: 1px solid gray; padding: 5px 8px; background-color: white; font-size:12px;
+            left: 50%; width: 1024px; margin-left: -512px;top: 32px; height: 515px;_position: absolute; _top: 50%; _margin-top: -260px; text-align: left; }
+            .modal-dialog .head { height: 30px; padding: 5px 0 10px; }
+            .modal-dialog .title { float: left; width: 200px; font-weight: bold; font-size: 16px; color: #0075C2; text-align: center; height: 30px; line-height: 30px; }
+            .modal-dialog a.m-btn { float: right; margin: 0 8px 0 30px; background-color: #0075C2; color: #FFF; height: 30px; line-height: 30px; padding: 0 20px; text-decoration: none; font-size: 14px; font-weight: bold; }
+            .modal-dialog a.m-btn-inverse { background-color: #E0E0E0; }
+            .modal-dialog a.m-btn:hover, .modal-dialog a.m-btn:focus { background-color: #3391CE; }
+            .modal-dialog a.m-btn-inverse:hover, .modal-dialog a.m-btn-inverse:focus { background-color: #999; }
+
+            .modal-dialog .content { float: none; height: 460px; width: 100%; overflow: auto; padding: 0 0 0 0; border: 1px solid #DDD; }
+            .modal-dialog .syntaxhighlighter { margin: 6px 0 0 0 !important; }
+            .modal-dialog .syntaxhighlighter {/* overflow: visible !important;*/ height: 100%!important;/* IE7-BUG */ }
+            .modal-dialog .syntaxhighlighter table td.code .alt1 { background-color: #F9F9F9 !important; }
+            .modal-dialog .syntaxhighlighter table td.code .line:hover { background-color: #F3F3F3 !important; }
+            .modal-dialog .syntaxhighlighter table td.code .line { padding: 0 0.6em !important; }
+
+            /* 导出代码，预览按钮 */
+            #codeResult { height: 90px; line-height: 90px; background-color: #FFF; margin-top: 20px; text-align: center; }
+            #codeResult a { display: inline-block; height: 40px; line-height: 40px; padding: 0 36px; color: #FFF; font-weight: bold; background-color: #0075C2; margin: 0 20px; text-decoration: none; }
+            #codeResult a.btn-inverse { background-color: #E0E0E0; }
+            #codeResult a:hover, #codeResult a:focus { background-color: #3391CE; }
+            #codeResult a.btn-inverse:hover, #codeResult a.btn-inverse:focus { background-color: #999; }
+
+            #overLaysListScroll { height: 390px; overflow: hidden; }
+            .overlays-list-title { font-weight: bold; padding: 12px 0; }
+            .overlays-list-item { margin-bottom: 10px; }
+            .overlays-list-item .overlays-item { border: 1px #E0E0E0 solid; height: 34px; line-height: 34px; }
+            .open-overlay .overlays-item { border-color: #7CA7E6; }
+            .overlays-item .overlays-icon { display: inline-block; width: 20px; height: 20px; padding: 7px 6px; background: url(/console/public/show/bg.32.png) -410px -143px no-repeat; }
+            .overlays-item .overlays-btn { float: right; _display: inline-block; margin-right: 10px; text-decoration: underline; color: #196EAB; cursor: pointer; }
+            /*.overlays-item */
+            /*.overlays-item .marker-icon { background: url(/Public/images/mapcreator/addmarker_small.png) no-repeat; }*/
+            .overlays-item .polyline-icon { background-position: -413px -194px; }
+            .overlays-item .polygon-icon { background-position: -413px -242px; }
+            .overlays-item .overlays-title{ width: 170px; overflow: hidden; text-overflow: ellipsis; word-break: break-all; word-wrap: break-word; white-space: nowrap; }
+
+            .overlays-set { padding: 14px 18px; border: 1px #7CA7E6 solid; border-top: 0; }
+            .overlays-set .hr { height: 0; font-size: 0; border: 1px solid #CCC; margin: 12px 0; }
+
+            .overlays-set-content .overlays-name { width: 232px; height: 16px; border: 1px #D2D2D2 solid; margin-bottom: 10px; padding: 5px; }
+            .overlays-set-content .overlays-info { width: 232px; height: 65px; border: 1px #D2D2D2 solid; padding: 5px; resize: none; }
+            .overlays-set-content .polyline-style-set { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+
+            .marker-icon-set { margin-top: 5px; }
+            .marker-icon-set a { width: 26px; height: 26px; float: left; margin: 0 10px; border: 1px #FFF solid;
+            background: url(/console/public/show/marker-select.png) no-repeat; }
+            .marker-icon-set a:hover, .marker-icon-set a.select { background-color: #F7F7F7; border-color: #E0E0E0; }
+            .marker-icon-set a.marker-cir-gray { background-position: 2px -166px; }
+            .marker-icon-set a.marker-flg-gray { background-position: -36px -166px; }
+            .marker-icon-set a.marker-anc-gray { background-position: -76px -166px; }
+            .marker-icon-set a.marker-twig-gray { background-position: -112px -166px; }
+            .marker-icon-set a.marker-pot-gray { background-position: -150px -166px; }
+
+            .overlays-color-set { margin-top: 8px; overflow: hidden; zoom: 1; }
+            .overlays-color-set a { width: 26px; height: 26px; float: left; margin: 0 10px; border: 1px #FFF solid; }
+            .overlays-color-set a:hover, .overlays-color-set a.select { border-color: #000; }
+            .overlays-color-set a.overlays-red { background: #F0202F; }
+            .overlays-color-set a.overlays-blue { background: #19A4EB; }
+            .overlays-color-set a.overlays-yellow { background: #FFCC02; }
+            .overlays-color-set a.overlays-green { background: #089A72; }
+            .overlays-color-set a.overlays-gray { background: #BBB; }
+
+            .marker-lnglat-set { margin-top: 10px; }
+            .marker-lnglat-set input { display: inline-block; height: 16px; width: 100px; border: 1px #D2D2D2 solid; margin: 0 10px 10px 0; padding: 5px; color: #B5B5B5; }
+
+            .polyline-shape-list { margin-top: 5px; }
+            .polyline-shape-list a { width: 26px; height: 26px; float: left; margin: 0 10px; border: 1px #FFF solid; background: url(/console/public/show/bg.32.png) 0 -179px no-repeat; }
+            .polyline-shape-list a:hover, .polyline-shape-list a.select { background-color: #F7F7F7; border-color: #E0E0E0; }
+
+            /*.polyline-shape-list .shape0 { background-position: 0 1px; }*/
+            .polyline-shape-list .shape1 { background-position: -38px -179px; }
+            .polyline-shape-list .shape2 { background-position: -75px -179px; }
+            .polyline-shape-list .shape3 { background-position: -113px -179px; }
+            .polyline-shape-list .shape4 { background-position: -151px -179px; }
+
+            .overlays-opacity-set { margin-top: 16px; width: 234px; }
+            .overlays-opacity-set .bar { height: 40px; margin-top: 10px; position: relative; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+            .overlays-opacity-set .track { height: 9px; position: relative; border-top: 1px #E0E0E0 solid; background: #F0F0F0; }
+            .overlays-opacity-set .drag { position: absolute; height: 7px; width: 12px; top: 6px; left: 0; cursor: pointer; background: url(/console/public/show/bg.32.png) 0 -250px no-repeat; }
+
+            .overlays-opacity-set .values { margin-top: 10px; }
+            .overlays-opacity-set .values .min { float: left; }
+            .overlays-opacity-set .values .max { float: right; }
+            .overlays-opacity-set .values .value { text-align: center; }
+
+            #locationContent{ position: relative; }
+            #locationContent .select-city{ height: 30px; line-height: 28px; position: relative; z-index: 2;}
+            #btnCurrentCity{ text-decoration: none; color:#333;
+            display: inline-block; height: 28px; padding: 0 28px 0 15px; background:#FFF url(/console/public/show/bg.32.png) right -288px no-repeat; border:1px solid #999; }
+            #btnCurrentCity.open{ border-bottom-color:#FFF; position: absolute; z-index: 4; *top:0;/* IE7-BUG */ }
+            #allCityList{ position: absolute; top:29px; left:0;/* IE8 BUG */ height: 300px; background: #FFF; border:1px solid #999; line-height: 150%; padding: 5px 12px; z-index: 3; }
+            #closeCityHolder{ height: 29px; line-height: 30px; border-bottom: 1px solid #999; }
+            #closeCityHolder a{ float: right; width:16px; height: 29px; _display:inline-block;background: url(/console/public/show/bg.32.png) -45px -240px no-repeat; }
+            #allCityListSelect{ height: 260px; padding: 8px 0 2px; overflow: auto; }
+            #allCityList th{ width:40px; font-weight: normal; vertical-align: top; padding:2px 0 0; }
+            #tbodyAllCities td{ padding:2px 0; }
+            #allCityListSelect{ border-spacing: 0;}
+            #allCityListSelect a{ display: inline-block; margin-right: 10px; padding: 1px; color: #0075C2; text-decoration: none; }
+
+            #searchArea{ margin: 10px 0 0; position: relative; }
+            #searchArea input{ height: 26px; padding: 0 5px; width:210px; *line-height: 26px; line-height: 26px\0; }
+            #btnGoSearch { display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; padding: 0 18px; font-weight: bold; background-color: #0075C2; float:right; /* IE7 对齐BUG */text-decoration: none; }
+            #btnGoSearch:hover, #btnGoSearch:focus { background-color: #3391CE; }
+            #searchSugList{ position: absolute; top:30px; width:220px; border:1px solid #999; border-top:none; }
+            #searchSugList a{ display: block; padding: 0 8px; word-wrap: break-word; word-break: break-all; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; height: 28px; line-height: 28px; text-decoration: none;color: #666; }
+            #searchSugList .selected, #searchSugList a:hover, #searchSugList a:focus{ background-color: #E3EAF2; }
+            #searchSugList span{ color:#557495; }.card{ padding:0;background:none; }
+        </style>
+
+        <script>
+
+!function(){"use strict";function a(a){return a.replace(/,/g,".").replace(/[^0-9\.]/g,"")}function b(b){return parseFloat(a(b))>=10}var c,d={bridge:null,version:"0.0.0",disabled:null,outdated:null,ready:null},e={},f=0,g={},h=0,i={},j=null,k=null,l=function(){var a,b,c,d,e="ZeroClipboard.swf";if(document.currentScript&&(d=document.currentScript.src));else{var f=document.getElementsByTagName("script");if("readyState"in f[0])for(a=f.length;a--&&("interactive"!==f[a].readyState||!(d=f[a].src)););else if("loading"===document.readyState)d=f[f.length-1].src;else{for(a=f.length;a--;){if(c=f[a].src,!c){b=null;break}if(c=c.split("#")[0].split("?")[0],c=c.slice(0,c.lastIndexOf("/")+1),null==b)b=c;else if(b!==c){b=null;break}}null!==b&&(d=b)}}return d&&(d=d.split("#")[0].split("?")[0],e=d.slice(0,d.lastIndexOf("/")+1)+e),e}(),m=function(){var a=/\-([a-z])/g,b=function(a,b){return b.toUpperCase()};return function(c){return c.replace(a,b)}}(),n=function(a,b){var c,d,e;return window.getComputedStyle?c=window.getComputedStyle(a,null).getPropertyValue(b):(d=m(b),c=a.currentStyle?a.currentStyle[d]:a.style[d]),"cursor"!==b||c&&"auto"!==c||(e=a.tagName.toLowerCase(),"a"!==e)?c:"pointer"},o=function(a){a||(a=window.event);var b;this!==window?b=this:a.target?b=a.target:a.srcElement&&(b=a.srcElement),I.activate(b)},p=function(a,b,c){a&&1===a.nodeType&&(a.addEventListener?a.addEventListener(b,c,!1):a.attachEvent&&a.attachEvent("on"+b,c))},q=function(a,b,c){a&&1===a.nodeType&&(a.removeEventListener?a.removeEventListener(b,c,!1):a.detachEvent&&a.detachEvent("on"+b,c))},r=function(a,b){if(!a||1!==a.nodeType)return a;if(a.classList)return a.classList.contains(b)||a.classList.add(b),a;if(b&&"string"==typeof b){var c=(b||"").split(/\s+/);if(1===a.nodeType)if(a.className){for(var d=" "+a.className+" ",e=a.className,f=0,g=c.length;g>f;f++)d.indexOf(" "+c[f]+" ")<0&&(e+=" "+c[f]);a.className=e.replace(/^\s+|\s+$/g,"")}else a.className=b}return a},s=function(a,b){if(!a||1!==a.nodeType)return a;if(a.classList)return a.classList.contains(b)&&a.classList.remove(b),a;if(b&&"string"==typeof b||void 0===b){var c=(b||"").split(/\s+/);if(1===a.nodeType&&a.className)if(b){for(var d=(" "+a.className+" ").replace(/[\n\t]/g," "),e=0,f=c.length;f>e;e++)d=d.replace(" "+c[e]+" "," ");a.className=d.replace(/^\s+|\s+$/g,"")}else a.className=""}return a},t=function(){var a,b,c,d=1;return"function"==typeof document.body.getBoundingClientRect&&(a=document.body.getBoundingClientRect(),b=a.right-a.left,c=document.body.offsetWidth,d=Math.round(b/c*100)/100),d},u=function(a,b){var c={left:0,top:0,width:0,height:0,zIndex:A(b)-1};if(a.getBoundingClientRect){var d,e,f,g=a.getBoundingClientRect();"pageXOffset"in window&&"pageYOffset"in window?(d=window.pageXOffset,e=window.pageYOffset):(f=t(),d=Math.round(document.documentElement.scrollLeft/f),e=Math.round(document.documentElement.scrollTop/f));var h=document.documentElement.clientLeft||0,i=document.documentElement.clientTop||0;c.left=g.left+d-h,c.top=g.top+e-i,c.width="width"in g?g.width:g.right-g.left,c.height="height"in g?g.height:g.bottom-g.top}return c},v=function(a,b){var c=null==b||b&&b.cacheBust===!0&&b.useNoCache===!0;return c?(-1===a.indexOf("?")?"?":"&")+"noCache="+(new Date).getTime():""},w=function(a){var b,c,d,e=[],f=[],g=[];if(a.trustedOrigins&&("string"==typeof a.trustedOrigins?f.push(a.trustedOrigins):"object"==typeof a.trustedOrigins&&"length"in a.trustedOrigins&&(f=f.concat(a.trustedOrigins))),a.trustedDomains&&("string"==typeof a.trustedDomains?f.push(a.trustedDomains):"object"==typeof a.trustedDomains&&"length"in a.trustedDomains&&(f=f.concat(a.trustedDomains))),f.length)for(b=0,c=f.length;c>b;b++)if(f.hasOwnProperty(b)&&f[b]&&"string"==typeof f[b]){if(d=D(f[b]),!d)continue;if("*"===d){g=[d];break}g.push.apply(g,[d,"//"+d,window.location.protocol+"//"+d])}return g.length&&e.push("trustedOrigins="+encodeURIComponent(g.join(","))),"string"==typeof a.jsModuleId&&a.jsModuleId&&e.push("jsModuleId="+encodeURIComponent(a.jsModuleId)),e.join("&")},x=function(a,b,c){if("function"==typeof b.indexOf)return b.indexOf(a,c);var d,e=b.length;for("undefined"==typeof c?c=0:0>c&&(c=e+c),d=c;e>d;d++)if(b.hasOwnProperty(d)&&b[d]===a)return d;return-1},y=function(a){if("string"==typeof a)throw new TypeError("ZeroClipboard doesn't accept query strings.");return a.length?a:[a]},z=function(a,b,c,d){d?window.setTimeout(function(){a.apply(b,c)},0):a.apply(b,c)},A=function(a){var b,c;return a&&("number"==typeof a&&a>0?b=a:"string"==typeof a&&(c=parseInt(a,10))&&!isNaN(c)&&c>0&&(b=c)),b||("number"==typeof L.zIndex&&L.zIndex>0?b=L.zIndex:"string"==typeof L.zIndex&&(c=parseInt(L.zIndex,10))&&!isNaN(c)&&c>0&&(b=c)),b||0},B=function(a,b){if(a&&b!==!1&&"undefined"!=typeof console&&console&&(console.warn||console.log)){var c="`"+a+"` is deprecated. See docs for more info:\n    https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/instructions.md#deprecations";console.warn?console.warn(c):console.log(c)}},C=function(){var a,b,c,d,e,f,g=arguments[0]||{};for(a=1,b=arguments.length;b>a;a++)if(null!=(c=arguments[a]))for(d in c)if(c.hasOwnProperty(d)){if(e=g[d],f=c[d],g===f)continue;void 0!==f&&(g[d]=f)}return g},D=function(a){if(null==a||""===a)return null;if(a=a.replace(/^\s+|\s+$/g,""),""===a)return null;var b=a.indexOf("//");a=-1===b?a:a.slice(b+2);var c=a.indexOf("/");return a=-1===c?a:-1===b||0===c?null:a.slice(0,c),a&&".swf"===a.slice(-4).toLowerCase()?null:a||null},E=function(){var a=function(a,b){var c,d,e;if(null!=a&&"*"!==b[0]&&("string"==typeof a&&(a=[a]),"object"==typeof a&&"length"in a))for(c=0,d=a.length;d>c;c++)if(a.hasOwnProperty(c)&&(e=D(a[c]))){if("*"===e){b.length=0,b.push("*");break}-1===x(e,b)&&b.push(e)}},b={always:"always",samedomain:"sameDomain",never:"never"};return function(c,d){var e,f=d.allowScriptAccess;if("string"==typeof f&&(e=f.toLowerCase())&&/^always|samedomain|never$/.test(e))return b[e];var g=D(d.moviePath);null===g&&(g=c);var h=[];a(d.trustedOrigins,h),a(d.trustedDomains,h);var i=h.length;if(i>0){if(1===i&&"*"===h[0])return"always";if(-1!==x(c,h))return 1===i&&c===g?"sameDomain":"always"}return"never"}}(),F=function(a){if(null==a)return[];if(Object.keys)return Object.keys(a);var b=[];for(var c in a)a.hasOwnProperty(c)&&b.push(c);return b},G=function(a){if(a)for(var b in a)a.hasOwnProperty(b)&&delete a[b];return a},H=function(){var a=!1;if("boolean"==typeof d.disabled)a=d.disabled===!1;else{if("function"==typeof ActiveXObject)try{new ActiveXObject("ShockwaveFlash.ShockwaveFlash")&&(a=!0)}catch(b){}!a&&navigator.mimeTypes["application/x-shockwave-flash"]&&(a=!0)}return a},I=function(a,b){return this instanceof I?(this.id=""+f++,g[this.id]={instance:this,elements:[],handlers:{}},a&&this.clip(a),"undefined"!=typeof b&&(B("new ZeroClipboard(elements, options)",L.debug),I.config(b)),this.options=I.config(),"boolean"!=typeof d.disabled&&(d.disabled=!H()),d.disabled===!1&&d.outdated!==!0&&null===d.bridge&&(d.outdated=!1,d.ready=!1,M()),void 0):new I(a,b)};I.prototype.setText=function(a){return a&&""!==a&&(e["text/plain"]=a,d.ready===!0&&d.bridge&&d.bridge.setText(a)),this},I.prototype.setSize=function(a,b){return d.ready===!0&&d.bridge&&d.bridge.setSize(a,b),this};var J=function(a){d.ready===!0&&d.bridge&&d.bridge.setHandCursor(a)};I.prototype.destroy=function(){this.unclip(),this.off(),delete g[this.id]};var K=function(){var a,b,c,d=[],e=F(g);for(a=0,b=e.length;b>a;a++)c=g[e[a]].instance,c&&c instanceof I&&d.push(c);return d};I.version="1.3.2";var L={swfPath:l,trustedDomains:window.location.host?[window.location.host]:[],cacheBust:!0,forceHandCursor:!1,zIndex:999999999,debug:!0,title:null,autoActivate:!0};I.config=function(a){"object"==typeof a&&null!==a&&C(L,a);{if("string"!=typeof a||!a){var b={};for(var c in L)L.hasOwnProperty(c)&&(b[c]="object"==typeof L[c]&&null!==L[c]?"length"in L[c]?L[c].slice(0):C({},L[c]):L[c]);return b}if(L.hasOwnProperty(a))return L[a]}},I.destroy=function(){I.deactivate();for(var a in g)if(g.hasOwnProperty(a)&&g[a]){var b=g[a].instance;b&&"function"==typeof b.destroy&&b.destroy()}var c=N(d.bridge);c&&c.parentNode&&(c.parentNode.removeChild(c),d.ready=null,d.bridge=null)},I.activate=function(a){c&&(s(c,L.hoverClass),s(c,L.activeClass)),c=a,r(a,L.hoverClass),O();var b=L.title||a.getAttribute("title");if(b){var e=N(d.bridge);e&&e.setAttribute("title",b)}var f=L.forceHandCursor===!0||"pointer"===n(a,"cursor");J(f)},I.deactivate=function(){var a=N(d.bridge);a&&(a.style.left="0px",a.style.top="-9999px",a.removeAttribute("title")),c&&(s(c,L.hoverClass),s(c,L.activeClass),c=null)};var M=function(){var a,b,c=document.getElementById("global-zeroclipboard-html-bridge");if(!c){var e=I.config();e.jsModuleId="string"==typeof j&&j||"string"==typeof k&&k||null;var f=E(window.location.host,L),g=w(e),h=L.moviePath+v(L.moviePath,L),i='      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%" height="100%">         <param name="movie" value="'+h+'"/>         <param name="allowScriptAccess" value="'+f+'"/>         <param name="scale" value="exactfit"/>         <param name="loop" value="false"/>         <param name="menu" value="false"/>         <param name="quality" value="best" />         <param name="bgcolor" value="#ffffff"/>         <param name="wmode" value="transparent"/>         <param name="flashvars" value="'+g+'"/>         <embed src="'+h+'"           loop="false" menu="false"           quality="best" bgcolor="#ffffff"           width="100%" height="100%"           name="global-zeroclipboard-flash-bridge"           allowScriptAccess="'+f+'"           allowFullScreen="false"           type="application/x-shockwave-flash"           wmode="transparent"           pluginspage="http://www.macromedia.com/go/getflashplayer"           flashvars="'+g+'"           scale="exactfit">         </embed>       </object>';c=document.createElement("div"),c.id="global-zeroclipboard-html-bridge",c.setAttribute("class","global-zeroclipboard-container"),c.style.position="absolute",c.style.left="0px",c.style.top="-9999px",c.style.width="15px",c.style.height="15px",c.style.zIndex=""+A(L.zIndex),document.body.appendChild(c),c.innerHTML=i}a=document["global-zeroclipboard-flash-bridge"],a&&(b=a.length)&&(a=a[b-1]),d.bridge=a||c.children[0].lastElementChild},N=function(a){for(var b=/^OBJECT|EMBED$/,c=a&&a.parentNode;c&&b.test(c.nodeName)&&c.parentNode;)c=c.parentNode;return c||null},O=function(){if(c){var a=u(c,L.zIndex),b=N(d.bridge);b&&(b.style.top=a.top+"px",b.style.left=a.left+"px",b.style.width=a.width+"px",b.style.height=a.height+"px",b.style.zIndex=a.zIndex+1),d.ready===!0&&d.bridge&&d.bridge.setSize(a.width,a.height)}return this};I.prototype.on=function(a,b){var c,e,f,h={},i=g[this.id]&&g[this.id].handlers;if("string"==typeof a&&a)f=a.toLowerCase().split(/\s+/);else if("object"==typeof a&&a&&"undefined"==typeof b)for(c in a)a.hasOwnProperty(c)&&"string"==typeof c&&c&&"function"==typeof a[c]&&this.on(c,a[c]);if(f&&f.length){for(c=0,e=f.length;e>c;c++)a=f[c].replace(/^on/,""),h[a]=!0,i[a]||(i[a]=[]),i[a].push(b);h.noflash&&d.disabled&&R.call(this,"noflash",{}),h.wrongflash&&d.outdated&&R.call(this,"wrongflash",{flashVersion:d.version}),h.load&&d.ready&&R.call(this,"load",{flashVersion:d.version})}return this},I.prototype.off=function(a,b){var c,d,e,f,h,i=g[this.id]&&g[this.id].handlers;if(0===arguments.length)f=F(i);else if("string"==typeof a&&a)f=a.split(/\s+/);else if("object"==typeof a&&a&&"undefined"==typeof b)for(c in a)a.hasOwnProperty(c)&&"string"==typeof c&&c&&"function"==typeof a[c]&&this.off(c,a[c]);if(f&&f.length)for(c=0,d=f.length;d>c;c++)if(a=f[c].toLowerCase().replace(/^on/,""),h=i[a],h&&h.length)if(b)for(e=x(b,h);-1!==e;)h.splice(e,1),e=x(b,h,e);else i[a].length=0;return this},I.prototype.handlers=function(a){var b,c=null,d=g[this.id]&&g[this.id].handlers;if(d){if("string"==typeof a&&a)return d[a]?d[a].slice(0):null;c={};for(b in d)d.hasOwnProperty(b)&&d[b]&&(c[b]=d[b].slice(0))}return c};var P=function(a,b,c,d){var e=g[this.id]&&g[this.id].handlers[a];if(e&&e.length){var f,h,i,j=b||this;for(f=0,h=e.length;h>f;f++)i=e[f],b=j,"string"==typeof i&&"function"==typeof window[i]&&(i=window[i]),"object"==typeof i&&i&&"function"==typeof i.handleEvent&&(b=i,i=i.handleEvent),"function"==typeof i&&z(i,b,c,d)}return this};I.prototype.clip=function(a){a=y(a);for(var b=0;b<a.length;b++)if(a.hasOwnProperty(b)&&a[b]&&1===a[b].nodeType){a[b].zcClippingId?-1===x(this.id,i[a[b].zcClippingId])&&i[a[b].zcClippingId].push(this.id):(a[b].zcClippingId="zcClippingId_"+h++,i[a[b].zcClippingId]=[this.id],L.autoActivate===!0&&p(a[b],"mouseover",o));var c=g[this.id].elements;-1===x(a[b],c)&&c.push(a[b])}return this},I.prototype.unclip=function(a){var b=g[this.id];if(b){var c,d=b.elements;a="undefined"==typeof a?d.slice(0):y(a);for(var e=a.length;e--;)if(a.hasOwnProperty(e)&&a[e]&&1===a[e].nodeType){for(c=0;-1!==(c=x(a[e],d,c));)d.splice(c,1);var f=i[a[e].zcClippingId];if(f){for(c=0;-1!==(c=x(this.id,f,c));)f.splice(c,1);0===f.length&&(L.autoActivate===!0&&q(a[e],"mouseover",o),delete a[e].zcClippingId)}}}return this},I.prototype.elements=function(){var a=g[this.id];return a&&a.elements?a.elements.slice(0):[]};var Q=function(a){var b,c,d,e,f,h=[];if(a&&1===a.nodeType&&(b=a.zcClippingId)&&i.hasOwnProperty(b)&&(c=i[b],c&&c.length))for(d=0,e=c.length;e>d;d++)f=g[c[d]].instance,f&&f instanceof I&&h.push(f);return h};L.hoverClass="zeroclipboard-is-hover",L.activeClass="zeroclipboard-is-active",L.trustedOrigins=null,L.allowScriptAccess=null,L.useNoCache=!0,L.moviePath="ZeroClipboard.swf",I.detectFlashSupport=function(){return B("ZeroClipboard.detectFlashSupport",L.debug),H()},I.dispatch=function(a,b){if("string"==typeof a&&a){var d=a.toLowerCase().replace(/^on/,"");if(d)for(var e=c?Q(c):K(),f=0,g=e.length;g>f;f++)R.call(e[f],d,b)}},I.prototype.setHandCursor=function(a){return B("ZeroClipboard.prototype.setHandCursor",L.debug),a="boolean"==typeof a?a:!!a,J(a),L.forceHandCursor=a,this},I.prototype.reposition=function(){return B("ZeroClipboard.prototype.reposition",L.debug),O()},I.prototype.receiveEvent=function(a,b){if(B("ZeroClipboard.prototype.receiveEvent",L.debug),"string"==typeof a&&a){var c=a.toLowerCase().replace(/^on/,"");c&&R.call(this,c,b)}},I.prototype.setCurrent=function(a){return B("ZeroClipboard.prototype.setCurrent",L.debug),I.activate(a),this},I.prototype.resetBridge=function(){return B("ZeroClipboard.prototype.resetBridge",L.debug),I.deactivate(),this},I.prototype.setTitle=function(a){if(B("ZeroClipboard.prototype.setTitle",L.debug),a=a||L.title||c&&c.getAttribute("title")){var b=N(d.bridge);b&&b.setAttribute("title",a)}return this},I.setDefaults=function(a){B("ZeroClipboard.setDefaults",L.debug),I.config(a)},I.prototype.addEventListener=function(a,b){return B("ZeroClipboard.prototype.addEventListener",L.debug),this.on(a,b)},I.prototype.removeEventListener=function(a,b){return B("ZeroClipboard.prototype.removeEventListener",L.debug),this.off(a,b)},I.prototype.ready=function(){return B("ZeroClipboard.prototype.ready",L.debug),d.ready===!0};var R=function(f,g){f=f.toLowerCase().replace(/^on/,"");var h=g&&g.flashVersion&&a(g.flashVersion)||null,i=c,j=!0;switch(f){case"load":if(h){if(!b(h))return R.call(this,"onWrongFlash",{flashVersion:h}),void 0;d.outdated=!1,d.ready=!0,d.version=h}break;case"wrongflash":h&&!b(h)&&(d.outdated=!0,d.ready=!1,d.version=h);break;case"mouseover":r(i,L.hoverClass);break;case"mouseout":L.autoActivate===!0&&I.deactivate();break;case"mousedown":r(i,L.activeClass);break;case"mouseup":s(i,L.activeClass);break;case"datarequested":var k=i.getAttribute("data-clipboard-target"),l=k?document.getElementById(k):null;if(l){var m=l.value||l.textContent||l.innerText;m&&this.setText(m)}else{var n=i.getAttribute("data-clipboard-text");n&&this.setText(n)}j=!1;break;case"complete":G(e)}var o=i,p=[this,g];return P.call(this,f,o,p,j)};"function"==typeof define&&define.amd?define(["require","exports","module"],function(a,b,c){return j=c&&c.id||null,I}):"object"==typeof module&&module&&"object"==typeof module.exports&&module.exports?(k=module.id||null,module.exports=I):window.ZeroClipboard=I}();</script>
+
+        <script src="http://webapi.amap.com/maps?v=1.3&amp;key=8325164e247e15eea68b59e89200988b"></script>
+
+        <div class="card dev_info_step_0">
+            <div id="wrapper">
+                <div id="bSideRight">
+                    <div id="mapContainer"></div>
+                </div>
+                <div id="bSideLeft">
+
+                    <ul id="navTabs" class="clearfix">
+                        <li><a href="javascript:;" class="step1 selected" data-target="location">定位地点</a></li>
+                        <li><a href="javascript:;" class="step2" data-target="style">地图样式</a></li>
+                        <li><a href="javascript:;" class="step3" data-target="marker">添加标注</a></li>
+                    </ul>
+
+                    <div id="leftContent">
+                        <div id="locationContent">
+                            <div class="select-city">
+                                <span>当前城市：</span><a href="javascript:;" id="btnCurrentCity">北京市</a>
+                                <div id="allCityList" class="hide">
+                                    <div id="closeCityHolder"><a href="javascript:;" title="关闭"></a>选择城市</div>
+                                    <div id="allCityListSelect">
+                                        <div id="tdHotCities"></div>
+                                        <table>
+                                            <tbody>
+                                            <tr><td colspan="2">城市列表</td>	</tr>
+                                            </tbody>
+                                            <tbody id="tbodyAllCities"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="searchArea">
+                                <div>
+                                    <a href="javascript:;" id="btnGoSearch" title="查询当前地点">查找</a>
+                                    <input type="text" id="txtSearchLocation" placeholder="输入地点快速定位">
+                                </div>
+                                <div id="searchSugList" class="hide"></div>
+                            </div>
+
+                        </div>
+
+                        <div id="styleContent" class="hide">
+                            <table class="map-style">
+                                <tr class="map-layer first-child">
+                                    <th><div >地图图层</div></th>
+                                    <td>
+                                        <div class="map-layer-bg">
+                                            <label class="selected first-child"><input type="radio" name="mapStyleLayerBG" value="Map" checked>地图</label>
+                                            <label><input type="radio" name="mapStyleLayerBG" value="TileLayer.Satellite">卫星</label>
+                                        </div>
+                                        <div><label><input type="checkbox" name="mapStyleLayerFT" value="TileLayer.RoadNet">路网地图</label></div>
+                                        <div><label><input type="checkbox" name="mapStyleLayerFT" value="TileLayer.Traffic">实时交通地图</label></div>
+                                        <div>
+                                            <label><input type="checkbox" name="mapStyleLayerFT" value="Buildings">3D楼块地图</label>
+                                            <div class="hide" id="msg3dInfo"></div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <tr class="map-status">
+                                    <th><div>地图状态</div></th>
+                                    <td>
+                                        <div><label><input type="checkbox" name="mapStyleStatus" value="keyboardEnable" checked>键盘方向键移动</label></div>
+                                        <div><label><input type="checkbox" name="mapStyleStatus" value="dragEnable" checked>鼠标拖移地图</label></div>
+                                        <div><label><input type="checkbox" name="mapStyleStatus" value="scrollWheel" checked>鼠标滚轮缩放</label></div>
+                                        <div><label><input type="checkbox" name="mapStyleStatus" value="doubleClickZoom" checked>鼠标双击放大</label></div>
+                                    </td>
+                                </tr>
+                                <tr class="map-toolbar">
+                                    <th><div>地图缩放</div></th>
+                                    <td class="fixed-label-width">
+                                        <div><label><input type="checkbox" name="mapStyleToolbar" value="show" checked>地图缩放</label></div>
+                                        <div>
+                                            <h6>样式</h6>
+                                            <label><input type="radio" name="mapStyleToolbarStyle" value="standard" checked>标准</label>
+                                            <label><input type="radio" name="mapStyleToolbarStyle" value="basic">精简</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="map-view">
+                                    <th><div>地图略缩图</div></th>
+                                    <td class="fixed-label-width">
+                                        <div><label><input type="checkbox" name="mapStyleView" value="show" checked>添加</label></div>
+                                        <div>
+                                            <h6>状态</h6>
+                                            <label><input type="radio" name="mapStyleViewStatus" value="open" checked>展开</label>
+                                            <label><input type="radio" name="mapStyleViewStatus" value="close">收起</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="map-scale">
+                                    <th><div>地图比例尺</div></th>
+                                    <td class="fixed-label-width">
+                                        <div><label><input type="checkbox" name="mapStyleScale" value="show" checked>添加</label></div>
+                                    </td>
+                                </tr>
+                                <tr class="map-size">
+                                    <th><div>地图尺寸</div></th>
+                                    <td>
+                                        <div><label><input type="radio" name="mapStyleSize" value="600*600" checked>大 600px × 600px</label></div>
+                                        <div><label><input type="radio" name="mapStyleSize" value="500*300">中 500px × 300px</label></div>
+                                        <div><label><input type="radio" name="mapStyleSize" value="400*240">小 400px × 240px</label></div>
+                                        <div>
+                                            <label><input type="radio" name="mapStyleSize" value="custom">自定义</label>
+                                            <label><input type="text" name="mapStyleSizeWidth" id="txtMapWidth" disabled>px</label> ×
+                                            <label><input type="text" name="mapStyleSizeHeight" id="txtMapHeight" disabled>px</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div id="markerContent" class="hide">
+                            <div>选择标注类型：</div>
+                            <div id="addOverlayTypes">
+                                <a href="javascript:;" data-type="marker" title="添加码点"></a>
+                                <a href="javascript:;" class="overlay-polyline" data-type="polyline" title="添加折线"></a>
+                                <a href="javascript:;" class="overlay-polygon" data-type="polygon" title="添加面"></a>
+                            </div>
+                            <div class="overlays-list-wrap">
+                                <div class="overlays-list-title">
+                                    已添加标记列表：
+                                </div>
+                                <div id="overLaysListScroll" class="scroll-pane">
+                                    <div id="overLaysList" class="overlays-list"></div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="clear"></div>
+                <div id="codeResult">
+
+                </div>
+            </div>
+        </div>
+<textarea style="display: none;" id="txtTmpl"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+   
+    <title>高德地图 - DIY我的地图</title>
+    <style>
+        body { margin: 0; font: 13px/1.5 "Microsoft YaHei", "Helvetica Neue", "Sans-Serif"; min-height: 960px; min-width: 600px; }
+        <%=data.style.join("\n\t\t")%>
+    </style>
+</head>
+<body>
+<div id="wrap" class="my-map">
+    <div id="mapContainer2"></div>
+</div>
+<script src="http://webapi.amap.com/maps?v=1.3&key=8325164e247e15eea68b59e89200988b"></script>
+<script>
+	!function(){
+		var infoWindow, map, level = <%=data.level%>,
+			center = {lng: <%=data.center.getLng()%>, lat: <%=data.center.getLat()%>},
+			features = [<%=data.features.join(",\n\t\t\t\t")%>];
+
+		function loadFeatures(){
+			for(var feature, data, i = 0, len = features.length, j, jl, path; i < len; i++){
+				data = features[i];
+				switch(data.type){
+					case "Marker":
+						feature = new AMap.Marker({ map: map, position: new AMap.LngLat(data.lnglat.lng, data.lnglat.lat),
+							zIndex: 3, extData: data, offset: new AMap.Pixel(data.offset.x, data.offset.y), title: data.name,
+							content: '<div class="icon icon-' + data.icon + ' icon-'+ data.icon +'-' + data.color +'"></div>' });
+						break;
+					case "Polyline":
+						for(j = 0, jl = data.lnglat.length, path = []; j < jl; j++){
+							path.push(new AMap.LngLat(data.lnglat[j].lng, data.lnglat[j].lat));
+						}
+						feature = new AMap.Polyline({ map: map, path: path, extData: data, zIndex: 2,
+							strokeWeight: data.strokeWeight, strokeColor: data.strokeColor, strokeOpacity: data.strokeOpacity });
+						break;
+					case "Polygon":
+						for(j = 0, jl = data.lnglat.length, path = []; j < jl; j++){
+							path.push(new AMap.LngLat(data.lnglat[j].lng, data.lnglat[j].lat));
+						}
+						feature = new AMap.Polygon({ map: map, path: path, extData: data, zIndex: 1,
+							strokeWeight: data.strokeWeight, strokeColor: data.strokeColor, strokeOpacity: data.strokeOpacity,
+							fillColor: data.fillColor, fillOpacity: data.fillOpacity });
+						break;
+					default: feature = null;
+				}
+				if(feature){ AMap.event.addListener(feature, "click", mapFeatureClick); }
+			}
+		}
+
+		function mapFeatureClick(e){
+			if(!infoWindow){ infoWindow = new AMap.InfoWindow({autoMove: true}); }
+			var extData = e.target.getExtData();
+			infoWindow.setContent("<h5>" + extData.name + "</h5><div>" + extData.desc + "</div>");
+			infoWindow.open(map, e.lnglat);
+		}
+
+		map = new AMap.Map("mapContainer", {center: new AMap.LngLat(center.lng, center.lat), level: level<%=data.options.length ? ", " + data.options.join(", "):""%>});
+		<%=data.layer.join("\n\t\t")%>
+		loadFeatures();<%if(data.plugin.length){%>
+		map.plugin([<%= '"' + data.plugin.join('", "') + '"' %>], function(){
+			<%=data.plugins.join("\n\t\t\t")%>
+		});
+<%}%>	}();
+	</script>
+</body>
+</html></textarea><script type="text/javascript">
+!function($){
+
+	//选择 定位地点，地图样式，添加标注
+	var $navTabs = $("#navTabs").on("click", "a", function(){
+		var $a = $(this), target = $a.attr("data-target");
+		$navTabs.find("a.selected").removeClass("selected");
+		$a.addClass("selected");
+		$("#leftContent").children().addClass("hide");
+		$("#" + target + "Content").removeClass("hide");
+	});
+
+	//初始化地图
+	var mapToolbar, mapOverView, mapScale, oldLayer, layers = {};
+	var citySearch, placeSearch, $sug=$("#searchSugList"), searchEventSrc, searchMarker, $searchMarkerDiv,
+		fnAddSearchMarker = function(lng, lat, name, address){
+		if(!$searchMarkerDiv){
+			$searchMarkerDiv = $("<div class='marker marker-cir'/>");
+			searchMarker = new AMap.Marker({offset: new AMap.Pixel(-9,-31), content: $searchMarkerDiv[0]})
+		}
+			var lnglat = new AMap.LngLat(lng, lat);
+			searchMarker.setTitle([name, (name && address) ? "\n": "", address].join(""));
+			searchMarker.setPosition(lnglat);
+			searchMarker.setMap(mapObj);
+			mapObj.setCenter(lnglat);
+	}, fnPlaceSearchCallback = function(result){
+		$sug.removeClass("hide");
+		if(result && result.poiList && result.poiList.pois && result.poiList.pois.length){
+			var pois = result.poiList.pois, i, il, html, poi, text, keyword, reg;
+			if(searchEventSrc == "click"){
+				$sug.addClass("hide");
+				poi = pois[0];
+				fnAddSearchMarker(poi.location.getLng(), poi.location.getLat(), poi.name, poi.address);
+			}
+			else{
+				for(html=[], i = 0, il = pois.length, keyword=$.trim($txtSearch[0].value), reg = new RegExp("(" + keyword.replace(/[()$.?*+\^\[\]\\]/,"\\$&") + ")", "i"); i < il; i++){
+					poi = pois[i];
+					text = (poi.name || poi.address).replace(reg, "<span>$1</span>");
+					html.push('<a data-lng="', poi.location.getLng(), '" data-lat="', poi.location.getLat(), '" title="' , poi.name, '" data-address="', poi.address ,'">', text, '</a>');
+				}
+				$sug.html(html.join(""));
+			}
+		}
+		else{ $sug.html('<a href="javascript:;" class="search-error">没有搜索到结果啊，亲！</a>'); } //搜索出错
+
+	};
+	var mapObj =  new AMap.Map("mapContainer",{center:new AMap.LngLat(116.397428,39.90923), resizeEnable:true,level:13 });
+	mapObj.plugin(["AMap.ToolBar","AMap.OverView","AMap.Scale","AMap.MouseTool", "AMap.PlaceSearch","AMap.CitySearch"], function(){
+		mapObj.addControl(mapToolbar = new AMap.ToolBar);
+		mapObj.addControl(mapOverView = new AMap.OverView({isOpen: true}));
+		mapObj.addControl(mapScale = new AMap.Scale);
+		citySearch = new AMap.CitySearch;
+		AMap.event.addListener(citySearch, "complete", function(result){
+			mapObj.setBounds(result.bounds);
+			$("#btnCurrentCity").html(result.city); //TODO：暂时不处理城市名称和本地名称是否对应的问题
+		});
+		citySearch.getLocalCity();
+		placeSearch = new AMap.PlaceSearch;
+		AMap.event.addListener(placeSearch, "complete", fnPlaceSearchCallback);
+		AMap.event.addListener(placeSearch, "error", fnPlaceSearchCallback);
+	});
+
+	//地图样式配置点击事件
+	var $width = $("#txtMapWidth"), $height = $("#txtMapHeight"), $map = $("#mapContainer");
+	var fnSetWidth = function(){
+		var width = Number($width[0].value);
+		if(isNaN(width) || width < 100){}
+		else{
+			if(width > 1920){ width = 1920; }
+			$map.css("width", Math.floor(width));
+		}
+	}, fnSetHeight = function(){
+		var height = Number($height[0].value), top;
+		if(isNaN(height) || height < 80){}
+		else{
+			if(height > 1080){ height = 1080; }
+			top = height < 600 ? Math.floor((600 - height)/2):0;
+			$map.css({height: height, top: top});
+		}
+	};
+
+	var bNotHtml5 = 1, $msg = $("#msg3dInfo"), fnShow3DMessage = function(msg){
+			$msg.html(msg).removeClass("hide").css("display", "block");
+			setTimeout(function(){
+				$msg.fadeOut("slow", function(){
+					$msg.addClass("hide");
+				});
+			}, 600);
+		},
+	$styleContent = $("#styleContent").on("click", function(e){
+		var target = e.target, targetName = target.name, targetValue = target.value, isCustom, temp;
+		if(target.nodeName != "INPUT" || target.disabled){ return; }
+		if(targetName == "mapStyleSize"){
+			isCustom = (targetValue == "custom");
+			$width.prop("disabled", !isCustom);
+			$height.prop("disabled", !isCustom);
+			if(isCustom){
+				fnSetWidth();
+				fnSetHeight();
+			}
+			else{
+				temp = targetValue.split("*");
+				$map.css({width: temp[0] + "px", height: temp[1] + "px", top: ((600 - temp[1]) / 2) + "px"});
+			}
+		}
+		else if(targetName == "mapStyleStatus"){
+			temp = {}; temp[targetValue] = target.checked;
+			mapObj.setStatus(temp);
+		}
+		else if(targetName == "mapStyleToolbar"){
+			mapToolbar[target.checked?"show":"hide"]();
+			$styleContent.find("input[name=mapStyleToolbarStyle]").prop("disabled", !target.checked);
+		}
+		else if(targetName == "mapStyleToolbarStyle"){
+			temp = targetValue == "standard"?"show":"hide";
+			mapToolbar[temp + "Ruler"]();
+			mapToolbar[temp + "Direction"]();
+//			mapToolbar[temp + "Location"]();
+		}
+		else if(targetName == "mapStyleView"){
+			mapOverView[target.checked ? "show" : "hide"]();
+			$styleContent.find("input[name=mapStyleViewStatus]").prop("disabled", !target.checked);
+		}
+		else if(targetName == "mapStyleViewStatus"){mapOverView[targetValue]();}
+		else if(targetName == "mapStyleScale"){ mapScale[target.checked ? "show" : "hide"](); }
+		else if(targetName == "mapStyleLayerBG"){
+			temp = "TileLayer.Satellite";
+			if(targetValue == temp){
+				if(!layers[targetValue]){ layers[targetValue] = new AMap.TileLayer.Satellite({zIndex:1, map: mapObj}); }
+				else{ layers[targetValue].setMap(mapObj); }
+			}
+			else{
+				if(layers[temp]){ layers[temp].setMap(null); }
+			}
+			$styleContent.find(".map-layer-bg label.selected").removeClass("selected");
+			$(target.parentNode).addClass("selected");
+//			if(oldLayer){ oldLayer.setMap(null); }
+//			if(targetValue == "default"){ oldLayer = null; }
+//			else{
+//				temp = targetValue == "Buildings";
+//				if(!layers[targetValue]){
+//					layers[targetValue] = temp? new AMap.Buildings : new AMap.TileLayer[targetValue.replace("TileLayer.", "")];
+//				}
+//				oldLayer = layers[targetValue];
+//				oldLayer.setMap(mapObj);
+//				if(temp && mapObj.getZoom() < 17){  }
+//			}
+		}
+		else if(targetName == "mapStyleLayerFT"){
+			if(target.checked){
+				temp = targetValue == "Buildings";
+				if(layers[targetValue]){ layers[targetValue].setMap(mapObj); }
+				else{
+					if(targetValue == "TileLayer.RoadNet"){ layers[targetValue] = new AMap.TileLayer.RoadNet({zIndex:2, map: mapObj}); }
+					else if(targetValue == "TileLayer.Traffic"){ layers[targetValue] = new AMap.TileLayer.Traffic({zIndex:3, map: mapObj}); }
+					else if(temp){ layers[targetValue] = new AMap.Buildings({zIndex:4, map: mapObj}); }
+				}
+				if(temp){
+					if(bNotHtml5){ fnShow3DMessage("请在支持 html5 的浏览器中查看！"); }
+					else if(mapObj.getZoom() < 17){
+						fnShow3DMessage("查看3D楼块请放大地图，亲！");
+					}
+				}
+			}
+			else{ layers[targetValue].setMap(null); }
+		}
+	});
+
+
+		try{
+			bNotHtml5 = !document.createElement("canvas").getContext("2d").beginPath;
+		}
+		catch(ex){}
+
+
+	$width.on("input propertychange", fnSetWidth);
+	$height.on("input propertychange", fnSetHeight);
+
+	var $body = $("body"), firstTime = (new Date).getTime(), now, fnPrepareToSearch = function(){
+
+		},fnSearchClickBody = function(){
+			$body.off("click", fnSearchClickBody);
+			$sug.addClass("hide");
+		},
+
+	$txtSearch = $("#txtSearchLocation").on("keyup", function(e){
+		if(e.keyCode==27){
+			fnSearchClickBody();return;
+		}
+		if(e.keyCode in {13:1, 33:2, 38:3, 34:4,40:5}){
+			var $a = $sug.find(".selected"),$temp;//= $sug.find(".selected");
+			switch (e.keyCode){
+				case 13:
+
+					if(!$a.length){ $a = $sug.find("a").eq(0); }
+					if(!$a.length || $a.hasClass("search-error")){ return; }
+					//$a.trigger("click"); fuck ie8 bug
+					$sug.addClass("hide");
+					fnAddSearchMarker($a.attr("data-lng"), $a.attr("data-lat"), $a[0].title, $a.attr("data-address"));
+					$txtSearch[0].value = $a[0].title || $a.attr("data-address");
+					fnSearchClickBody();
+
+					return;
+				case 33: // page up
+				case 38: // up
+
+					if($a.length){
+						$a.removeClass("selected");
+						$temp = $a.prev("a");
+						if($temp.length){ $temp.addClass("selected"); }
+						else{ $sug.find("a").eq(-1).addClass("selected"); }
+					}
+					else{
+						$sug.find("a").eq(-1).addClass("selected");
+					}
+					return;
+				case 34:
+				case 40:
+
+					if($a.length){
+						$a.removeClass("selected");
+						$temp = $a.next("a");
+						if($temp.length){ $temp.addClass("selected"); }
+						else{ $sug.find("a").eq(0).addClass("selected"); }
+					}
+					else{
+						$sug.find("a").eq(0).addClass("selected");
+					}
+					return;
+
+			}
+		}
+		else{
+			now = (new Date).getTime();
+			if(now - firstTime < 30){ return; }
+			firstTime = now;
+			setTimeout(function(){
+				var keyword = $.trim($txtSearch[0].value);
+				if(keyword){
+					placeSearch.setCity(MA.cityObj[$("#btnCurrentCity")[0].innerHTML].code);
+					placeSearch.search(keyword);
+				}
+			}, 30);
+		}
+
+
+	});
+	$sug.on("click", function(e){
+		var a = e.target, $a;
+		if("A" != a.nodeName || /error/.test(a.className)){ return; }
+		$a = $(a);
+		$sug.addClass("hide");
+		fnAddSearchMarker($a.attr("data-lng"), $a.attr("data-lat"), a.title, $a.attr("data-address"));
+		$txtSearch[0].value = a.title || $a.attr("data-address");
+	});
+
+	$("#btnGoSearch").click(function(){
+		var keyword = $.trim($txtSearch[0].value);
+		if(keyword){
+			placeSearch.setCity(MA.cityObj[$("#btnCurrentCity")[0].innerHTML].code);
+			placeSearch.search(keyword);
+		}
+	});
+
+	$(function(){
+		MA.initMapcreator(mapObj);
+		MA.clearSearchMarker = function(){
+			if(searchMarker){ searchMarker.setMap(null); }
+
+		};
+	});
+}(jQuery);
+;!function(window, $){
+
+	var htmlEncodeDict = { '"': "quot", "<": "lt", ">": "gt", "&": "amp",/* " ": "nbsp",*/"'":"#39" },
+	 encodeHTML= function(html) {
+	 	/*
+		if(html=== null || html === void 0){return html;} //空内容，不编码，否则会吧 null 编码为字符；
+		//return String(html).replace(/['"<>& \xA0]/g, function(all){
+		return String(html).replace(/['"<>&]/g, function(all){
+			return "&" + htmlEncodeDict[all] + ";";
+		});
+		*/
+		html = html.replace(/"/g, "'");
+		html = html.replace(/\n/g, "<br />");
+		return html.replace(/<script.*?>.*?<\/script>/ig, '');
+
+	};
+
+	var seed = 0, activateFeature, infoWindow, infoWindowOpening, mouseTool, map,
+		markerIcons = ['cir', 'flg', 'anc', 'twig', 'pot'],
+		defaultIcon = markerIcons[0],
+
+		markerOffsets = {'cir': {x: -9, y: -31}, 'flg': {x: -12, y: -26}, 'anc': {x: -9, y: -26}, 'twig': {x: -13, y: -26}, 'pot': {x: -11, y: -26}},
+		defaultOffset = markerOffsets[defaultIcon],
+		overlaysColor = ['red', 'blue', 'yellow', 'green', 'gray'],
+		defaultMarkerColor = overlaysColor[0],
+
+		pathWidth = [2,5,9,15,20],
+		defaultPathWidth = pathWidth[1], defaultFillWidth = pathWidth[0],
+		defaultPathOpacity = 80, defaultFillOpacity = 20,
+
+		pathColor = {red:"#F0202F", blue:"#19A4EB", yellow:"#FFCC02", green:"#089A72", gray:"#BBBBBB"},
+		defaultPathColor = overlaysColor[1]/* pathColor.blue*/, defaultFillColor = overlaysColor[0] /*pathColor.red*/,
+
+		$addOverlayTypes, $overlays, $iwName, $iwDesc ,
+
+iconBg = {
+     cir:{x:31,y:28},flg:{x:32,y:29},anc:{x:28,y:26},twig:{x:27,y:30},pot:{x:23,y:31},
+	"cir-gray":{x:-11,y:-205},"flg-gray":{x:-65,y:-205},"anc-gray":{x:-132,y:-205},"twig-gray":{x:-187,y:-205},"pot-gray":{x:-234,y:-205},
+	"cir-red":{x:-11,y:-5},"flg-red":{x:-65,y:-5},"anc-red":{x:-132,y:-5},"twig-red":{x:-187,y:-5},"pot-red":{x:-234,y:-5},
+	"cir-blue":{x:-11,y:-55},"flg-blue":{x:-65,y:-55},"anc-blue":{x:-132,y:-55},"twig-blue":{x:-187,y:-55},"pot-blue":{x:-234,y:-55},
+	"cir-yellow":{x:-11,y:-105},"flg-yellow":{x:-65,y:-105},"anc-yellow":{x:-132,y:-105},"twig-yellow":{x:-187,y:-105},"pot-yellow":{x:-234,y:-105},
+	"cir-green":{x:-11,y:-155},"flg-green":{x:-65,y:-155},"anc-green":{x:-132,y:-155},"twig-green":{x:-187,y:-155},"pot-green":{x:-234,y:-155}
+},
+		defaultIconBg = iconBg[defaultIcon + "-" + defaultMarkerColor],
+		markerInfoWindowOffset = {x: 6, y: -30},
+
+		fnRefreshScroll = function(){
+			//TODO 刷新滚动条
+			$('#overLaysListScroll').jScrollPane({
+				mouseWheelSpeed: 40,
+				verticalDragMinHeight: 27
+			});
+		},
+		fnAddFeaturesToList = function(feature){
+			var $holder = $("#overLaysList");
+			var overlays_item = '<div class="overlays-list-item open-overlay" id="list'+ feature.type +
+				feature.index +'" data-index="' + feature.index +'"><div class="overlays-item"><a class="delet-btn overlays-btn" data-index="' +
+				feature.index + '">删除</a><a class="modify-btn overlays-btn" data-status="open" data-index="' +
+				feature.index + '">收起</a><a href="javascript:;" class="pull-left overlays-icon ' +
+				feature.type + '-icon"></a><label class="overlays-title pull-left" data-index="' + feature.index + '">' +
+				(encodeHTML(feature.data.name) || '未命名标注') + '</label></div><div class="overlays-item-box"><div class="overlays-set-content"></div></div></div>';
+			$holder.append(overlays_item);
+				fnLoadMarkerDetail($("#list" + feature.type + feature.index + " .overlays-set-content"), feature);
+		},
+
+        divide2Rectangles = function(feature){
+
+            var lnglatPath=[], lngSort=[], latSort=[];
+
+		    if(feature instanceof AMap.Polyline){
+				lnglatPath = feature.getPath();
+			}
+			else if(feature instanceof AMap.Polygon){
+				lnglatPath = feature.getPath();
+			}else{
+			 console.log("不支持");
+			  throw Error("现在还不支持。");
+			}
+			if(lnglatPath.length <3){
+                console.log("不支持");
+                throw Error("现在还不支持。");
+			}
+            console.log("Path=" + lnglatPath);
+             var bounds = feature.getBounds();
+             var northEastLngLat = bounds.getNorthEast();
+             var southWestLngLat = bounds.getSouthWest();
+
+             var northEastPoint = getNorthEastBasePoint(northEastLngLat);
+             var southWestLngLat =getSouthWestBasePoint(southWestLngLat);
+
+             var cells = [], minLng = southWestLngLat.lng,maxLng = northEastPoint.lng,
+             minLat =southWestLngLat.lat, maxLat =  northEastPoint.lat;
+
+            //顶点处理
+            var cellNorthEastLngLat;
+            var cellsouthWestLngLat;
+            var obj;
+            var count=0;
+            var pointCnt = lnglatPath.length;
+            var i,j,len;
+
+            for(i=0,len = pointCnt; i< len; i++){
+                var lngLatinfo = lnglatPath[i];
+
+                cells[count++] = getBaseCell(lngLatinfo);
+            }
+             //0.01 其实就是 1000NTU
+             for(i= minLng;i< maxLng; i= i+lngGapWidth){
+                 for(j= minLat;j<maxLat; j= j+latGapWidth){
+                    if(!pointsInEreas(feature,i,j) &&
+                       !pointsInEreas(feature,i,j+latGapWidth) &&
+                       !pointsInEreas(feature,i+lngGapWidth,j) &&
+                       !pointsInEreas(feature,i+lngGapWidth,j+latGapWidth)){
+                        continue;
+                     }
+                    obj = new Object();
+                    obj.southWestLng = i;
+                    obj.southWestLat = j;
+                    obj.northEastLng = i+lngGapWidth;
+                    obj.northEastLat = j+latGapWidth;
+                    cells[count++] = obj;
+
+                 }
+             }
+             console.log("cells : \n")
+
+             var imageLayer = null;
+             var layers =  map.getLayers();
+             for( var i=0,len=cells.length; i< len; i++){
+                var cell = cells[i];
+               console.log("["+cell.southWestLng +"," +cell.southWestLat +"],[" +                        cell.northEastLng +"," + cell.northEastLat+"]");
+
+                  imageLayer = new AMap.ImageLayer({
+                          url: 'test.PNG',
+                          bounds: new AMap.Bounds(
+                          [cell.southWestLng, cell.southWestLat],
+                          [cell.northEastLng, cell.northEastLat]
+                      ),
+                       zooms: [15, 18]
+                   });
+
+                  layers.push(imageLayer);
+             }
+
+             map.layers= layers;
+
+        };
+        var defaultSepLng = 1000, defaultSepLat =1000;
+
+        var pointsInEreas = function(feature,lng,lat){
+             var tmpLngLat = new AMap.LngLat(lng,lat);
+              if(feature.contains(tmpLngLat)){
+                 return true;
+              }
+              return false;
+        };
+
+
+
+
+        //经度度默认间隔
+        var lngGapWidth = 0.01;
+        //纬度默认间隔
+        var latGapWidth = 0.01;
+        var getBaseCell = function(lngLatinfo){
+               var cellNorthEastLngLat = getNorthEastBasePoint(lngLatinfo);
+               var cellsouthWestLngLat = getSouthWestBasePoint(lngLatinfo);
+
+               var obj = new Object();
+               obj.southWestLng = cellsouthWestLngLat.lng;
+               obj.southWestLat = cellsouthWestLngLat.lat;
+               obj.northEastLng = cellsouthWestLngLat.lng;
+               obj.northEastLat = cellsouthWestLngLat.lat;
+               if(obj.southWestLng == obj.northEastLng ){
+                  obj.northEastLng = obj.southWestLng + lngGapWidth;
+               }
+                if(obj.northEastLat == obj.southWestLat ){
+                  obj.northEastLat = obj.southWestLat + latGapWidth;
+               }
+               return obj;
+        };
+
+        var getNorthEastBasePoint = function(lnglat){
+             var lng = Math.ceil(lnglat.getLng() * 100000);
+             var lat = Math.ceil(lnglat.getLat() * 100000);
+             var resultLnglat={};
+             if(lng % defaultSepLng ==0 && lat % defaultSepLat ==0){
+                resultLnglat.lng= lng/100000;
+                resultLnglat.lat= lat/100000;
+                return resultLnglat;
+             }
+             if(lng % defaultSepLng ==0 && lat % defaultSepLat !=0)
+             {
+                resultLnglat.lng= lng/100000;
+                resultLnglat.lat= getBasePoint(lat,"2")/100000;
+                return resultLnglat;
+             }
+
+             if(lng % defaultSepLng !=0 && lat % defaultSepLat ==0)
+             {
+                resultLnglat.lng= getBasePoint(lng,"2")/100000;
+                resultLnglat.lat= lat/100000;
+                return resultLnglat;
+             }
+             if(lng % defaultSepLng !=0 && lat % defaultSepLat !=0)
+             {
+                resultLnglat.lng= getBasePoint(lng,"2")/100000;
+                resultLnglat.lat= getBasePoint(lat,"2")/100000;
+                return resultLnglat;
+             }
+        },
+         getSouthWestBasePoint = function(lnglat){
+             var lng = Math.ceil(lnglat.getLng() * 100000);
+             var lat = Math.ceil(lnglat.getLat() * 100000);
+             var resultLnglat={};
+             if(lng % defaultSepLng ==0 && lat % defaultSepLat ==0){
+                resultLnglat.lng= lng/100000;
+                resultLnglat.lat= lat/100000;
+                return resultLnglat;
+             }
+             if(lng % defaultSepLng ==0 && lat % defaultSepLat !=0)
+             {
+                resultLnglat.lng= lng/100000;
+                resultLnglat.lat= getBasePoint(lat,"1")/100000;
+                return resultLnglat;
+             }
+
+             if(lng % defaultSepLng !=0 && lat % defaultSepLat ==0)
+             {
+                resultLnglat.lng= getBasePoint(lng,"1")/100000;
+                resultLnglat.lat= lat/100000;
+                return resultLnglat;
+             }
+             if(lng % defaultSepLng !=0 && lat % defaultSepLat !=0)
+             {
+                resultLnglat.lng= getBasePoint(lng,"1")/100000;
+                resultLnglat.lat= getBasePoint(lat,"1")/100000;
+                return resultLnglat;
+             }
+        },
+
+        getBasePoint = function(lngOrlat, type)
+        { //type 1：西南方向，2:东北方向
+
+             var i =0;
+             if("1" == type)
+             {
+                 for(i =lngOrlat; i>=0; i--)
+                 {
+                     if(i % defaultSepLat ==0)
+                     {
+                        break;
+                     }
+                 }
+                 return i;
+             }
+             if("2" == type)
+             {
+                 for(i =lngOrlat; true; i++)
+                 {
+                     if(i % defaultSepLng ==0)
+                     {
+                         break;
+                     }
+                 }
+                 return i;
+             }
+
+             return 0;
+        },
+
+		features = {},
+
+		fnBeginDrawFeature = function(type){
+			if(mouseTool.__drawListener){
+				mouseTool.close();
+				AMap.event.removeListener(mouseTool.__drawListener);
+			}
+
+			if(type == "marker"){
+				var content = document.createElement("div");
+				content.className = "marker marker-" + defaultIcon;
+				content.style.backgroundPosition =  defaultIconBg.x + "px " + defaultIconBg.y + "px";
+				mouseTool.marker({draggable: true, content:content,	offset:markerOffsets.cir, zIndex:3});
+			}
+			else if(type == "polyline"){
+				mouseTool.polyline({strokeColor: pathColor[defaultPathColor], strokeOpacity: defaultPathOpacity/100, strokeWeight: defaultPathWidth, zIndex:2});
+
+			}
+			else if(type == "polygon"){
+				mouseTool.polygon({strokeColor: pathColor[defaultPathColor], strokeOpacity: defaultPathOpacity/100, strokeWeight: defaultFillWidth,
+					fillColor: pathColor[defaultFillColor], fillOpacity: defaultFillOpacity/100, zIndex:1});
+			}
+			else{ return; }
+			mouseTool.__drawListener = AMap.event.addListener(mouseTool, "draw", fnAfterDrawFeature);
+
+		},
+		fnAfterDrawFeature = function(e){
+			MA.clearSearchMarker();
+
+			var feature = e.obj, lnglat;
+			feature.__id = seed;
+			if(feature instanceof AMap.Marker){
+				feature.getContent().id = "myOverlay" + seed;
+				lnglat = feature.getPosition();
+				activateFeature = {index: seed, overlay: feature, type:"marker", lnglat: lnglat,
+					data: {icon: defaultIcon, color: defaultMarkerColor, name:"", desc:""}};
+			}
+			else if(feature instanceof AMap.Polyline){
+				lnglat = feature.getPath();
+				lnglat = lnglat[lnglat.length - 1];
+				activateFeature = {index: seed, overlay: feature, type:"polyline", lnglat: lnglat,
+					data: {strokeWeight:defaultPathWidth, strokeColor: defaultPathColor, strokeOpacity:defaultPathOpacity, name:"", desc:""}}; // gray
+			}
+			else if(feature instanceof AMap.Polygon){
+				lnglat = feature.getPath();
+				lnglat = lnglat[lnglat.length - 1];
+				activateFeature = {index: seed, overlay: feature, type:"polygon", lnglat: lnglat,
+					data: {strokeWeight:defaultFillWidth, strokeColor: defaultPathColor, strokeOpacity:defaultPathOpacity,
+						fillColor:defaultFillColor, fillOpacity:defaultFillOpacity, name:"", desc:""}}; // gray
+			}
+			else{ throw Error("现在还不支持。");}
+
+			features[seed] = activateFeature;
+			if(!infoWindow){ fnLoadInfoWindow(); }
+			fnOpenInfoWindow();
+			fnCloseFeature();
+
+			fnAddFeaturesToList(activateFeature);
+
+			divide2Rectangles(feature);
+
+			fnRefreshScroll();
+
+			$addOverlayTypes.find("a.select").removeClass("select");
+
+			AMap.event.removeListener(mouseTool.__drawListener);
+			mouseTool.__drawListener = null;
+			mouseTool.close();
+			seed++;
+			// Marker 的点击事件，拖拽事件不移除，这些应该由 AMap 负责
+			feature.__clickListener = AMap.event.addListener(feature, "click", fnFeatureClick);
+			feature.__draggingListener = AMap.event.addListener(feature, "dragging", fnMarkerDrag);
+			map.panTo(lnglat);
+		},
+		$info,
+		fnLoadInfoWindow = function(){
+			$("body").append('<div style="display:none;"><div id="iwWrap"><div class="iw-title" id="iwOverLayName"></div><div class="iw-content" id="iwOverLayDesc"></div></div></div>');
+			$info = $("#iwWrap");
+			//$info.find(".iw-close").on("click", function(){ infoWindow.close(); });
+			$iwName = $("#iwOverLayName");
+			$iwDesc = $("#iwOverLayDesc");
+
+		},
+		fnOpenInfoWindow = function(e){
+			$iwName[0].innerHTML = encodeHTML(activateFeature.data.name)|| '未命名标注';
+			$iwDesc[0].innerHTML = encodeHTML(activateFeature.data.desc)|| '未命名标注描述';
+			var opt = {map: map, isCustom: false, content: $info[0], position: (e && e.lnglat) ? e.lnglat : activateFeature.lnglat}; // MD, 破 infoWindow，没法更新 offset
+			if(activateFeature.overlay instanceof AMap.Marker){ opt.offset = new AMap.Pixel(markerInfoWindowOffset.x, markerInfoWindowOffset.y); }
+			//else{ opt.offset={x:0,y:0}; }
+			infoWindow = new AMap.InfoWindow(opt);
+			infoWindow.__id = activateFeature.index;
+		},
+		fnFeatureClick = function(e){
+			fnCloseFeature();
+			activateFeature = features[e.target.__id];
+			if(!infoWindow){ fnLoadInfoWindow(); }
+				map.setCenter(e.lnglat);
+
+			fnBeginEditFeature(e);
+		},
+		fnMarkerDrag = function(e){
+			var feature = features[e.target.__id], $lng = $("#marker-lng");
+			feature.lnglat = e.lnglat;
+			if($lng.attr("data-index") == feature.index){
+				$lng[0].value = e.lnglat.getLng();
+				$("#marker-lat")[0].value = e.lnglat.getLat();
+			}
+			if(infoWindow && infoWindow.__id == feature.index && infoWindow.getIsOpen()){
+				infoWindow.setPosition(e.lnglat);
+			}
+		},
+		fnLoadMarkerDetail = function($holder, feature){
+			var i, len, html = ['<div class="overlays-set">'],
+				isMarker = feature.overlay instanceof AMap.Marker,
+				isPolyline = feature.overlay instanceof AMap.Polyline,
+				isPolygon = feature.overlay instanceof AMap.Polygon;
+
+			// 加载 名称 和描述
+			html.push('<div class="overlays-txt-set">');
+			html.push('<input type="text" class="overlays-name" placeholder="输入标记名称" value="' +
+						encodeHTML(feature.data.name) + '" data-index="' + feature.index +'"/>');
+			html.push('<textarea class="overlays-info" placeholder="输入标记备注" data-index="' + feature.index +
+				'">' + encodeHTML(feature.data.desc) + '</textarea>');
+			html.push('</div>');
+
+			// 加载第一个横线
+			html.push('<div class="hr"></div>');
+
+			// 加载 标记图标 和 线型
+			html.push('<div class="overlays-style-set">');
+			if(isMarker){
+				html.push('<div><span>标记图标:</span></div>');
+				html.push('<div class="marker-icon-set clearfix">');
+				for(i = 0, len = markerIcons.length; i < len; i++){
+					html.push('<a href="javascript:;" class="marker-' + markerIcons[i] + '-gray'+
+						(feature.data.icon == markerIcons[i]?" select":"") + '" data-icon="' + markerIcons[i] +
+						'" data-index="' + feature.index + '"></a>');
+				}
+				html.push('</div>');
+			}
+			else/* if( isPolyline || isPolygon)*/{
+				html.push('<div><span>线型:</span></div>');
+				html.push('<div class="polyline-shape-list clearfix">');
+				for(i = 0, len = pathWidth.length; i < len; i++){
+					html.push('<a class="shape' + i + (feature.data.strokeWeight == pathWidth[i] ? " select" : "") +
+						'" href="javascript:;" data-strokeWeight="' + pathWidth[i] + '" data-index="' + feature.index + '"></a>');
+				}
+				html.push('</div>');
+			}
+			// 加载颜色块；
+			html.push('<div class="overlays-color-set clearfix jsFrontColor">');
+			for(i = 0, len = overlaysColor.length; i < len; i++){
+				html.push('<a href="javascript:;" class="overlays-' + overlaysColor[i] +
+					((feature.data.strokeColor||feature.data.color) == overlaysColor[i]?" select":"") + '" data-color="' + overlaysColor[i] +
+					'" data-index="' + feature.index + '"></a>');
+			}
+			html.push('</div>');
+
+			//加载坐标 和透明度，面编辑信息
+			if(isMarker){
+				html.push('<div class="hr"></div>');
+				html.push('<div class="marker-lnglat-set clearfix">');
+				html.push('<div><span>坐标:</span></div>');
+				html.push('<div><input type="text" id="marker-lng" disabled value="' + feature.lnglat.getLng() +
+					'" data-index="' + feature.index + '"/>');
+				html.push('<input type="text" id="marker-lat" disabled value="' + feature.lnglat.getLat() +
+					'" data-index="' + feature.index + '"/>');
+				html.push('</div></div>');
+			}
+			else/* if( isPolyline || isPolygon)*/{
+				html.push('<div class="overlays-opacity-set clearfix jsFrontOpacity">');
+				html.push('<div><span>线透明度%:</span></div>');
+				html.push('<div class="bar"><div class="track"></div><div class="drag" style="left:' +
+					(feature.data.strokeOpacity * 2.34 - 6).toFixed(0) + 'px;" data-property="strokeOpacity"></div>');
+				html.push('<div class="values clearfix">',
+					'<span class="max">100</span><span class="min">0</span>',
+					'<div class="value">',  feature.data.strokeOpacity, '</div></div>');
+				html.push('</div></div>');
+
+				if(isPolygon){
+					html.push('<div class="hr"></div>');
+					// 加载颜色块；
+					html.push('<div><span>面填充色:</span></div>');
+					html.push('<div class="overlays-color-set clearfix jsFillColor">');
+					for(i = 0, len = overlaysColor.length; i < len; i++){
+						html.push('<a href="javascript:;" class="overlays-' + overlaysColor[i] +
+							(feature.data.fillColor == overlaysColor[i]?" select":"") + '" data-color="' + overlaysColor[i] +
+							'" data-index="' + feature.index + '"></a>');
+					}
+					html.push('</div>');
+
+					html.push('<div class="overlays-opacity-set clearfix jsFillOpacity">');
+					html.push('<div><span>面透明度%:</span></div>');
+					html.push('<div class="bar"><div class="track"></div><div class="drag" style="left:' +
+						(feature.data.fillOpacity * 2.34 - 6).toFixed(0) + 'px;" data-property="fillOpacity"></div>');
+					html.push('<div class="values clearfix">',
+						'<span class="max">100</span><span class="min">0</span>',
+						'<div class="value">',  feature.data.fillOpacity, '</div></div>');
+					html.push('</div></div>');
+				}
+			}
+			html.push('</div></div>'); // 闭合 style-set, overlays-set
+			$holder.html(html.join(''));
+
+		},
+		fnCloseFeature = function(){
+			var $openOverlay = $overlays.find("div.open-overlay"), $feature, feature, $holder;
+			if($openOverlay.length){
+				$openOverlay.removeClass("open-overlay");
+				$feature =$openOverlay.find("a.modify-btn");
+				feature = features[$feature.attr("data-index")];
+				$holder = $("#list" + feature.type + feature.index);
+				$holder.find(".overlays-set-content").empty();
+				//$a = $holder.find("a.modify-btn[data-status=open]");
+				$feature.attr("data-status", "close");
+				$feature[0].innerHTML = "编辑";
+			}
+		},
+		fnBeginEditFeature = function(e){
+			var $openOverlay = $overlays.find(".overlays-list-item[data-index=" + activateFeature.index +"]").addClass("open-overlay");
+			var $a = $openOverlay.find("a.modify-btn");
+			fnOpenInfoWindow(e);
+			$a.attr("data-status", "open");
+			$a[0].innerHTML = "收起";
+			fnLoadMarkerDetail($("#list" + activateFeature.type + activateFeature.index).find(".overlays-set-content"), activateFeature);
+		};
+	$(function($){
+		$addOverlayTypes = $("#addOverlayTypes").on("click", "a", function(){
+			if($overlays.children().length > 10){ alert("我们就先添加10个标注物吧，太多我就凌乱了。"); }
+			else{
+				var $a = $(this);
+				if($a.hasClass("select")){ return; }
+				$addOverlayTypes.find("a.select").removeClass("select");
+				$a.addClass("select");
+				fnBeginDrawFeature($a.attr("data-type"));
+			}
+		});
+
+		$overlays = $("#overLaysList").on("click", ".marker-icon-set a", function(){
+			var $a = $(this), index = $a.attr("data-index"), icon = $a.attr("data-icon"),
+				feature = activateFeature, div, bg;
+			$a.siblings(".select").removeClass("select");
+			$a.addClass("select");
+			div = $("#myOverlay" + index)[0];
+			div.className = ["marker", "marker-"+icon].join(" ");
+			bg = iconBg[icon + "-" + feature.data.color];
+			div.style.backgroundPosition = bg.x + "px "+ bg.y + "px";
+			feature.data.icon = icon;
+		});
+
+		$overlays.on("click", ".jsFrontColor a", function(){
+			var $a = $(this), /*index = $a.attr("data-index"), */
+				color = $a.attr("data-color"), feature = activateFeature, bg;
+			$a.siblings(".select").removeClass("select");
+			$a.addClass("select");
+			if(feature.overlay instanceof AMap.Marker){
+				feature.data.color = color;
+				bg = iconBg[feature.data.icon + "-" + color];
+				$("#myOverlay" + feature.index)[0].style.backgroundPosition = bg.x + "px " + bg.y + "px";
+			}
+			else{ //feature instanceof AMap.Polyline, feature instanceof AMap.Polygon
+				feature.data.strokeColor = color;
+				feature.overlay.setOptions({ strokeColor: pathColor[color]});
+			}
+		});
+
+		$overlays.on("click", ".polyline-shape-list a", function(){
+			var $a = $(this), opt = {strokeWeight: $a.attr("data-strokeWeight")};
+			$a.siblings(".select").removeClass("select");
+			$a.addClass("select");
+			activateFeature.data.strokeWeight = opt.strokeWeight;
+			activateFeature.overlay.setOptions(opt);
+		});
+
+		$overlays.on("click", ".jsFillColor a", function(){
+			var $a = $(this), color = $a.attr("data-color"), feature = activateFeature, bg;
+			$a.siblings(".select").removeClass("select");
+			$a.addClass("select");
+			feature.data.fillColor = color;
+			feature.overlay.setOptions({ fillColor: pathColor[color]});
+		});
+
+		$overlays.on("click", ".overlays-title", function(){
+			fnCloseFeature();
+			activateFeature = features[this.getAttribute("data-index")];
+			fnBeginEditFeature();
+		});
+
+		$overlays.on("click", "a.overlays-btn", function(){
+			var $a = $(this), index = $a.attr("data-index"), feature = features[index], $holder;
+			if($a.hasClass("modify-btn")){
+				var oldStatus = $a.attr("data-status");
+				fnCloseFeature(); // 无论是否打开，都关闭当前打开的元素
+				if(oldStatus != "open"){
+					activateFeature = feature;
+					fnBeginEditFeature();
+				}
+			}
+			else if($a.hasClass("delet-btn")){
+				$holder = $("#list" + feature.type + feature.index);
+				if(infoWindow && infoWindow.getIsOpen){ infoWindow.close(); }
+				AMap.event.removeListener(feature.overlay.__clickListener);
+				AMap.event.removeListener(feature.overlay.__draggingListener);
+				feature.overlay.setMap(null);
+				$holder.remove();
+				delete features[index];
+			}
+		});
+
+
+
+		var lastTime = (new Date).getTime(), fnUserInput = function(){
+			var self = this, now = (new Date).getTime();
+			if(now - lastTime < 10){ return; }
+			lastTime = now;
+			setTimeout(function(){
+				var defaultName = "未命名标注", defaultDesc = "未命名标注描述", feature = features[self.getAttribute("data-index")], opt;
+
+				if(!infoWindow){
+					fnLoadInfoWindow();
+					$iwName[0].innerHTML = defaultName;
+					$iwDesc[0].innerHTML = defaultDesc;
+
+					opt = {map: map, isCustom: false, content: $info[0], position: feature.lnglat}; // MD, 破 infoWindow，没法更新 offset
+					if(feature.overlay instanceof AMap.Marker){ opt.offset = new AMap.Pixel(markerInfoWindowOffset.x, markerInfoWindowOffset.y); }
+					infoWindow = new AMap.InfoWindow(opt);
+				}
+
+				if("INPUT" ==self.nodeName){
+					feature.data.name = self.value;
+					$iwName[0].innerHTML =  $("#list" + feature.type + feature.index + " .overlays-title")[0].innerHTML = encodeHTML(self.value) || defaultName;
+				}
+				else{
+					feature.data.desc = self.value;
+					$iwDesc[0].innerHTML = encodeHTML(self.value) || defaultDesc;
+					infoWindow.setContent($info[0]); // 重新设置内容，复制位置发生变化
+				}
+
+				if(!infoWindow.getIsOpen()){
+					opt = {map: map, isCustom: false, content: $info[0], position: feature.lnglat}; // MD, 破 infoWindow，没法更新 offset
+					if(feature.overlay instanceof AMap.Marker){ opt.offset = new AMap.Pixel(markerInfoWindowOffset.x, markerInfoWindowOffset.y); }
+					infoWindow = new AMap.InfoWindow(opt);
+				}
+			}, 10);
+
+		};
+		$overlays.on("input propertychange keyup", ":text", fnUserInput);
+		$overlays.on("input propertychange keyup", "textarea", fnUserInput);
+
+		var $val, $drag, prop, startX, $body = $(document.body), fnDragOpacity = function(e){
+			//TODO: 设置透明度 // 拖拽符号 12x7 大小
+			var opt = {}, val, left = activateFeature.data[prop] * 2.34 - 6 + e.clientX - startX;
+			if(left < -6){ left = -6; }
+			else if(left > 234 - 6){ left = 234 - 6; }
+			$val[0].innerHTML = val = ((left + 6)/2.34).toFixed(0);
+			opt[prop] = val/100;
+			activateFeature.overlay.setOptions(opt);
+			$drag.css("left", left.toFixed(0) + "px");
+		}, fnDragOpacityEnd = function(){
+			$body.off("mousemove", fnDragOpacity);
+			$body.off("mouseup", fnDragOpacityEnd);
+			activateFeature.data[prop] = Number($val[0].innerHTML);
+			$val = null; $drag = null;
+		};
+		$overlays.on("mousedown", ".drag", function(e){
+			startX = e.clientX;
+			$drag = $(this);
+			prop = $drag.attr("data-property");
+			$val = $drag.closest(".bar").find(".value");
+			$body.on("mousemove", fnDragOpacity);
+			$body.on("mouseup", fnDragOpacityEnd);
+			$drag[0].onselectstart = null;
+		});
+
+		var $viewButton = $("#codeResult").find("a");
+		$viewButton.eq(0).on("click", MA.showCode);
+		$viewButton.eq(1).on("click", MA.openWindow);
+
+
+	});
+
+	var $modalBack, $modal, runHtml;
+	var fnGenerateShowHtml, fnGenerateRunHtml;
+	(function(){
+		var text = document.getElementById("txtTmpl").value,  keys = {"<":"&lt;",">":"&gt;","&":"&amp;"};
+		var fnText = ("%>" + text + "<%").replace(/%>([\s\S]*?)<%/mg,function(matched/*, text, index, origin*/){
+			return matched.replace(/'/g, "\\'").replace(/(\r?\n)/mg, "\\n');_p.push('");
+		}).replace(/^%>/, "var _p=[];_p.push('").replace(/<%$/, "');return _p.join('');")
+			.replace(/<%=([\s\S]*?)%>/mg, "', $1, '").replace(/<%([\s\S]*?)%>/mg, "');$1 _p.push('");
+		fnGenerateRunHtml = Function("data", fnText);
+		fnGenerateShowHtml = Function("data", fnText.replace(/[<>&]/g, function(k){ return keys[k]; }));
+	})();
+
+
+	window.MA = {
+		initMapcreator: function(mapInst){
+			var self = this;
+			this.mapObj = map = mapInst;
+			//		this.addMouseToll(map);
+			//添加MouseTool插件
+			map.plugin(["AMap.MouseTool"], function(){
+				mouseTool =	self.mousetool = new AMap.MouseTool(map);
+				self.mousetool.drawListener = null;
+			});
+			//		this.bindEvent();
+		},
+		generatePreviewObj: function(){
+			var data, seed, bg, key, feature, j, jl, path, pathJs, style=[], styleObj = {}, overlays =[];
+//			this.mapObj.setFitView();
+			var center = this.mapObj.getCenter(), level = this.mapObj.getZoom(), $map = $("#mapContainer");
+//			var mapWidth = $map.width(), mapHeight = $map.height();
+			var $style = $("#styleContent"), mapStatus = [], mapScale= [], mapOverView = [], mapToolbar=[],
+				layer=[], plugin = [], plugins = [], options = [];
+
+			style.push(".my-map { margin: 0 auto; width: " + $map.width() + "px; height: " + $map.height() + "px; }");
+
+			$style.find("tr.map-status input").each(function(index, input){
+				if(!input.checked){ options.push(input.value + ": false"); }
+			});
+
+			//地图缩放工具条，显示/不显示，标准/精简
+			if($style.find("input[name=mapStyleToolbar]")[0].checked){
+				plugin.push('AMap.ToolBar');
+				//TODO：地图api网站里，默认参数没有 location 此配置
+				plugins.push('map.addControl(new AMap.ToolBar' +
+					($style.find("input[name=mapStyleToolbarStyle]")[0].checked?'':'({ruler: false, direction: false, locate: false})')+');');
+			}
+
+			$style.find("tr.map-view input").each(function(index, input){
+				//如果没有选择显示鹰眼，直接 return false 退出
+				if(input.name == "mapStyleView"){
+					if(input.checked){
+						plugin.push('AMap.OverView');
+					}
+					return input.checked;
+				}
+				//NOTE: 鹰眼默认关闭，详细参见API网站；但是不能确保API网站是否会更改策略，又不想做代码冗余，愁人；
+				plugins.push('map.addControl(new AMap.OverView' + (input.checked?"({isOpen: true})":"") + ");");
+				return false;
+			});
+
+			// 地图比例尺，显示/不显示
+			if($style.find("input[name=mapStyleScale]")[0].checked){
+				plugin.push('AMap.Scale');
+				plugins.push('map.addControl(new AMap.Scale);');
+			}
+
+			if($style.find("input:checked[name=mapStyleLayerBG]")[0].value == "TileLayer.Satellite"){
+				layer.push('new AMap.TileLayer.Satellite({map: map, zIndex: 1});');
+			}
+			$style.find("input:checked[name=mapStyleLayerFT]").each(function(index, input){
+				layer.push('new AMap.' + input.value + '({map: map, zIndex: ' + (index + 2) +'});');
+			});
+
+
+			for(seed in features){
+				feature = features[seed];
+				data = feature.data;
+				if(feature.overlay instanceof AMap.Marker){
+					key = data.icon;
+					if(!styleObj[key]){
+						bg = iconBg[key];
+						styleObj[key] = '.my-map .icon-' + key + ' { height: ' + bg.x + 'px; width: ' + bg.y + 'px; }';
+						style.push(styleObj[key]);
+					}
+
+					overlays.push('{type: "Marker", name: "' + encodeHTML(data.name) +
+						'", desc: "' + encodeHTML(data.desc) +
+						'", color: "' + data.color +
+						'", icon: "' + data.icon +
+						'", offset: {x: ' + markerOffsets[key].x + ', y: ' + markerOffsets[key].y +
+						'}, lnglat: {lng: ' + feature.lnglat.getLng() + ', lat: ' + feature.lnglat.getLat() + '}}');
+
+					key = data.icon + "-" + data.color;
+					if(!styleObj[key]){
+						bg = iconBg[key];
+						styleObj[key] = '.my-map .icon-' + key +' { background-position: ' + bg.x + 'px '+ bg.y + 'px; }';
+						style.push(styleObj[key]);
+					}
+				}
+				else if(feature.overlay instanceof AMap.Polyline){
+					for(path = feature.overlay.getPath(), j = 0, jl = path.length, pathJs = []; j < jl; j++){
+						pathJs.push('{lng: ' + path[j].getLng() + ', lat: ' + path[j].getLat() + '}');
+					}
+					overlays.push('{type: "Polyline", name: "' + encodeHTML(data.name) +
+						'", desc: "' + encodeHTML(data.desc) +
+						'", strokeWeight: ' + data.strokeWeight +
+						', strokeColor: "' + pathColor[data.strokeColor] +
+						'", strokeOpacity: ' + (data.strokeOpacity / 100)+
+						', lnglat: [' + pathJs.join(", ") + ']}');
+				}
+				else if(feature.overlay instanceof AMap.Polygon){
+					for(path = feature.overlay.getPath(), j = 0, jl = path.length, pathJs = []; j < jl; j++){
+						pathJs.push('{lng: ' + path[j].getLng() + ', lat: ' + path[j].getLat() + '}');
+					}
+					overlays.push('{type: "Polygon", name: "' + encodeHTML(data.name) +
+						'", desc: "' + encodeHTML(data.desc) +
+						'", strokeWeight: ' + data.strokeWeight +
+						', strokeColor: "' + pathColor[data.strokeColor] +
+						'", strokeOpacity: ' + (data.strokeOpacity / 100) +
+						', fillColor: "' + data.fillColor +
+						'", fillOpacity:' + (data.fillOpacity / 100) +
+						', lnglat: [' + pathJs.join(", ") + ']}');
+				}
+			}
+			if(style.length > 1){
+				style.splice(1, 0, '.my-map .icon { background: url(http://' + location.host + '/console/public/show/marker.png) no-repeat; }');
+			}
+			return {style: style, features: overlays, level: level, center: center, plugin: plugin, plugins: plugins, options: options, layer: layer};
+
+
+		},
+		showCode: function(){
+			var //keys = {"<":"&lt;",">":"&gt;","&":"&amp;"},
+				//html = srcHTML.replace(/[<>&]/g, function(k){ return keys[k]; }),
+				obj = MA.generatePreviewObj(),
+			html = '<pre class="brush:js;html-script:true;first-line:1;toolbar:false">' + fnGenerateShowHtml(obj) + "</pre>";
+			runHtml = fnGenerateRunHtml(obj);
+			if(!$modal){
+				$modalBack = $('<div class="modal-backdrop"/>');
+				$modal = $('<div class="modal-dialog"><div class="head"><a href="javascript:;" class="m-btn m-btn-inverse">关闭</a><a href="javascript:;" class="m-btn jsBtnCopy">复制代码</a><div class="title">自制地图源代码</div></div><div class="content"></div></div>');
+
+				$modal.find("a.m-btn-inverse").on("click", function(){
+					 $modal.css("display", "none"); $modalBack.css("display", "none");
+				});
+
+				var $btnCopy = $modal.find("a.jsBtnCopy");
+				if(window.clipboardData){
+					$btnCopy.on("click", function(){
+						window.clipboardData.setData("Text", runHtml);
+						alert("已成功复制源代码");
+					});
+				}
+				else{
+					ZeroClipboard.config({ moviePath: "/console/public/show/ZeroClipboard.swf" });
+					var client = new ZeroClipboard( $btnCopy[0]); //,{moviePath:"/Public/zeroclipboard-1.3.2/ZeroClipboard.swf"});
+					client.on("dataRequested", function(client, args){
+						client.setText(runHtml);
+					});
+					client.on("complete", function(client, args){
+						alert("已成功复制源代码");
+					});
+					client.on("noflash", function(client, args){
+						alert("复制源代码失败，请用鼠标选中复制，或者安装 Flash 后再试");
+					});
+				}
+
+
+				$(document.body).append($modalBack, $modal);
+			}
+			else{ $modal.css("display", "block"); $modalBack.css("display", "block"); }
+
+			$modal.children(".content").empty().html(html);
+			SyntaxHighlighter.highlight( $modal.find("pre")[0]);
+		},
+		openWindow: function(){
+			var obj = MA.generatePreviewObj(),
+			html = fnGenerateRunHtml(obj),
+			doc = window.open("", "_blank", "").document;
+			doc.open("text/html", "replace");
+			doc.write(html);
+			if(doc.execCommand){ doc.execCommand("Refresh"); }
+			doc.close();
+		},
+		setCurrentCity: function(city){
+			var detail = MA.cityObj[city];
+			if(detail){
+				$("#btnCurrentCity")[0].innerHTML = detail.label;
+				MA.mapObj.setZoomAndCenter(8, new AMap.LngLat(detail.lng, detail.lat));
+			}
+		}
+	};
+
+}(window, jQuery);
+
+!function(){
+
+	var cities = {
+		"100000": "",
+		"110000": "",
+		"120000": "",
+		"130000": "130100,石家庄市,Shijiazhuang,114.502461,38.045474,0311;130200,唐山市,Tangshan,118.175393,39.635113,0315;130300,秦皇岛市,Qinhuangdao,119.586579,39.942531,0335;130400,邯郸市,Handan,114.490686,36.612273,0310;130500,邢台市,Xingtai,114.508851,37.0682,0319;130600,保定市,Baoding,115.482331,38.867657,0312;130700,张家口市,Zhangjiakou,114.884091,40.811901,0313;130800,承德市,Chengde,117.939152,40.976204,0314;130900,沧州市,Cangzhou,116.857461,38.310582,0317;131000,廊坊市,Langfang,116.713873,39.529244,0316;131100,衡水市,Hengshui,115.665993,37.735097,0318",
+		"140000": "140100,太原市,Taiyuan,112.549248,37.857014,0351;140200,大同市,Datong,113.295259,40.09031,0352;140300,阳泉市,Yangquan,113.583285,37.861188,0353;140400,长治市,Changzhi,113.113556,36.191112,0355;140500,晋城市,Jincheng,112.851274,35.497553,0356;140600,朔州市,Shuozhou,112.433387,39.331261,0349;140700,晋中市,Jinzhong,112.736465,37.696495,0354;140800,运城市,Yuncheng,111.003957,35.022778,0359;140900,忻州市,Xinzhou,112.733538,38.41769,0350;141000,临汾市,Linfen,111.517973,36.08415,0357;141100,吕梁市,Lvliang,111.134335,37.524366,0358",
+		"150000": "150100,呼和浩特市,Hohhot,111.670801,40.818311,0471;150200,包头市,Baotou,109.840405,40.658168,0472;150300,乌海市,Wuhai,106.825563,39.673734,0473;150400,赤峰市,Chifeng,118.956806,42.275317,0476;150500,通辽市,Tongliao,122.263119,43.617429,0475;150600,鄂尔多斯市,Ordos,109.99029,39.817179,0477;150700,呼伦贝尔市,Hulunber,119.758168,49.215333,0470;150800,巴彦淖尔市,Bayan Nur,107.416959,40.757402,0478;150900,乌兰察布市,Ulanqab,113.114543,41.034126,0474;152200,兴安盟,Hinggan,122.070317,46.076268,0482;152500,锡林郭勒盟,Xilin Gol,116.090996,43.944018,0479;152900,阿拉善盟,Alxa,105.706422,38.844814,0483",
+		"210000": "210100,沈阳市,Shenyang,123.429096,41.796767,024;210200,大连市,Dalian,121.618622,38.91459,0411;210300,鞍山市,Anshan,122.995632,41.110626,0412;210400,抚顺市,Fushun,123.921109,41.875956,0413;210500,本溪市,Benxi,123.770519,41.297909,0414;210600,丹东市,Dandong,124.383044,40.124296,0415;210700,锦州市,Jinzhou,121.135742,41.119269,0416;210800,营口市,Yingkou,122.235151,40.667432,0417;210900,阜新市,Fuxin,121.648962,42.011796,0418;211000,辽阳市,Liaoyang,123.18152,41.269402,0419;211100,盘锦市,Panjin,122.06957,41.124484,0427;211200,铁岭市,Tieling,123.844279,42.290585,0410;211300,朝阳市,Chaoyang,120.451176,41.576758,0421;211400,葫芦岛市,Huludao,120.856394,40.755572,0429",
+		"220000": "220100,长春市,Changchun,125.3245,43.886841,0431;220200,吉林市,Jilin,126.55302,43.843577,0432;220300,四平市,Siping,124.370785,43.170344,0434;220400,辽源市,Liaoyuan,125.145349,42.902692,0437;220500,通化市,Tonghua,125.936501,41.721177,0435;220600,白山市,Baishan,126.427839,41.942505,0439;220700,松原市,Songyuan,124.823608,45.118243,0438;220800,白城市,Baicheng,122.841114,45.619026,0436;222400,延边朝鲜族自治州,Yanbian,129.513228,42.904823,1433",
+		"230000": "230100,哈尔滨市,Harbin,126.642464,45.756967,0451;230200,齐齐哈尔市,Qiqihar,123.953486,47.348079,0452;230300,鸡西市,Jixi,130.975966,45.300046,0467;230400,鹤岗市,Hegang,130.277487,47.332085,0468;230500,双鸭山市,Shuangyashan,131.157304,46.643442,0469;230600,大庆市,Daqing,125.11272,46.590734,0459;230700,伊春市,Yichun,128.899396,47.724775,0458;230800,佳木斯市,Jiamusi,130.361634,46.809606,0454;230900,七台河市,Qitaihe,131.015584,45.771266,0464;231000,牡丹江市,Mudanjiang,129.618602,44.582962,0453;231100,黑河市,Heihe,127.499023,50.249585,0456;231200,绥化市,Suihua,126.99293,46.637393,0455;232700,大兴安岭地区,Da Hinggan Ling,124.711526,52.335262,0457",
+		"310000": "",
+		"320000": "320100,南京市,Nanjing,118.767413,32.041544,025;320200,无锡市,Wuxi,120.301663,31.574729,0510;320300,徐州市,Xuzhou,117.184811,34.261792,0516;320400,常州市,Changzhou,119.946973,31.772752,0519;320500,苏州市,Suzhou,120.619585,31.299379,0512;320600,南通市,Nantong,120.864608,32.016212,0513;320700,连云港市,Lianyungang,119.178821,34.600018,0518;320800,淮安市,Huai'an,119.021265,33.597506,0517;320900,盐城市,Yancheng,120.139998,33.377631,0515;321000,扬州市,Yangzhou,119.421003,32.393159,0514;321100,镇江市,Zhenjiang,119.452753,32.204402,0511;321200,泰州市,Taizhou,119.915176,32.484882,0523;321300,宿迁市,Suqian,118.293328,33.945154,0527",
+		"330000": "330100,杭州市,Hangzhou,120.153576,30.287459,0571;330200,宁波市,Ningbo,121.549792,29.868388,0574;330300,温州市,Wenzhou,120.672111,28.000575,0577;330400,嘉兴市,Jiaxing,120.750865,30.762653,0573;330500,湖州市,Huzhou,120.102398,30.867198,0572;330600,绍兴市,Shaoxing,120.582112,29.997117,0575;330700,金华市,Jinhua,119.649506,29.089524,0579;330800,衢州市,Quzhou,118.87263,28.941708,0570;330900,舟山市,Zhoushan,122.106863,30.016028,0580;331000,台州市,Taizhou,121.428599,28.661378,0576;331100,丽水市,Lishui,119.921786,28.451993,0578",
+		"340000": "340100,合肥市,Hefei,117.283042,31.86119,0551;340181,巢湖市,Chaohu,117.874155,31.600518,0551;340200,芜湖市,Wuhu,118.376451,31.326319,0553;340300,蚌埠市,Bengbu,117.36237,32.934037,0552;340400,淮南市,Huainan,117.025449,32.645947,0554;340500,马鞍山市,Ma'anshan,118.507906,31.689362,0555;340600,淮北市,Huaibei,116.794664,33.971707,0561;340700,铜陵市,Tongling,117.816576,30.929935,0562;340800,安庆市,Anqing,117.053571,30.524816,0556;341000,黄山市,Huangshan,118.317325,29.709239,0559;341100,滁州市,Chuzhou,118.316264,32.303627,0550;341200,阜阳市,Fuyang,115.819729,32.896969,1558;341300,宿州市,Suzhou,116.984084,33.633891,0557;341500,六安市,Lu'an,116.507676,31.752889,0564;341600,亳州市,Bozhou,115.782939,33.869338,0558;341700,池州市,Chizhou,117.489157,30.656037,0566;341800,宣城市,Xuancheng,118.757995,30.945667,0563",
+		"350000": "350100,福州市,Fuzhou,119.306239,26.075302,0591;350200,厦门市,Xiamen,118.11022,24.490474,0592;350300,莆田市,Putian,119.007558,25.431011,0594;350400,三明市,Sanming,117.635001,26.265444,0598;350500,泉州市,Quanzhou,118.589421,24.908853,0595;350600,漳州市,Zhangzhou,117.661801,24.510897,0596;350700,南平市,Nanping,118.178459,26.635627,0599;350800,龙岩市,Longyan,117.02978,25.091603,0597;350900,宁德市,Ningde,119.527082,26.65924,0593",
+		"360000": "360100,南昌市,Nanchang,115.892151,28.676493,0791;360200,景德镇市,Jingdezhen,117.214664,29.29256,0798;360300,萍乡市,Pingxiang,113.852186,27.622946,0799;360400,九江市,Jiujiang,115.992811,29.712034,0792;360500,新余市,Xinyu,114.930835,27.810834,0790;360600,鹰潭市,Yingtan,117.033838,28.238638,0701;360700,赣州市,Ganzhou,114.940278,25.85097,0797;360800,吉安市,Ji'an,114.986373,27.111699,0796;360900,宜春市,Yichun,114.391136,27.8043,0795;361000,抚州市,Fuzhou,116.358351,27.98385,0794;361100,上饶市,Shangrao,117.971185,28.44442,0793",
+		"370000": "370100,济南市,Jinan,117.000923,36.675807,0531;370200,青岛市,Qingdao,120.369557,36.094406,0532;370300,淄博市,Zibo,118.047648,36.814939,0533;370400,枣庄市,Zaozhuang,117.557964,34.856424,0632;370500,东营市,Dongying,118.4963,37.461266,0546;370600,烟台市,Yantai,121.391382,37.539297,0535;370700,潍坊市,Weifang,119.107078,36.70925,0536;370800,济宁市,Jining,116.587245,35.415393,0537;370900,泰安市,Tai'an,117.129063,36.194968,0538;371000,威海市,Weihai,122.116394,37.509691,0631;371100,日照市,Rizhao,119.461208,35.428588,0633;371200,莱芜市,Laiwu,117.677736,36.214397,0634;371300,临沂市,Linyi,118.326443,35.065282,0539;371400,德州市,Dezhou,116.307428,37.453968,0534;371500,聊城市,Liaocheng,115.980367,36.456013,0635;371600,滨州市,Binzhou,118.016974,37.383542,0543;371700,菏泽市,Heze,115.469381,35.246531,0530",
+		"410000": "410100,郑州市,Zhengzhou,113.665412,34.757975,0371;410200,开封市,Kaifeng,114.341447,34.797049,0378;410300,洛阳市,Luoyang,112.434468,34.663041,0379;410400,平顶山市,Pingdingshan,113.307718,33.735241,0375;410500,安阳市,Anyang,114.352482,36.103442,0372;410600,鹤壁市,Hebi,114.295444,35.748236,0392;410700,新乡市,Xinxiang,113.883991,35.302616,0373;410800,焦作市,Jiaozuo,113.238266,35.23904,0391;410900,濮阳市,Puyang,115.041299,35.768234,0393;411000,许昌市,Xuchang,113.826063,34.022956,0374;411100,漯河市,Luohe,114.026405,33.575855,0395;411200,三门峡市,Sanmenxia,111.194099,34.777338,0398;411300,南阳市,Nanyang,112.540918,32.999082,0377;411400,商丘市,Shangqiu,115.650497,34.437054,0370;411500,信阳市,Xinyang,114.075031,32.123274,0376;411600,周口市,Zhoukou,114.649653,33.620357,0394;411700,驻马店市,Zhumadian,114.024736,32.980169,0396;419001,济源市,Jiyuan,112.590047,35.090378,1391",
+		"420000": "420100,武汉市,Wuhan,114.298572,30.584355,027;420200,黄石市,Huangshi,115.077048,30.220074,0714;420300,十堰市,Shiyan,110.785239,32.647017,0719;420500,宜昌市,Yichang,111.290843,30.702636,0717;420600,襄阳市,Xiangyang,112.144146,32.042426,0710;420700,鄂州市,Ezhou,114.890593,30.396536,0711;420800,荆门市,Jingmen,112.204251,31.03542,0724;420900,孝感市,Xiaogan,113.926655,30.926423,0712;421000,荆州市,Jingzhou,112.23813,30.326857,0716;421100,黄冈市,Huanggang,114.879365,30.447711,0713;421200,咸宁市,Xianning,114.328963,29.832798,0715;421300,随州市,Suizhou,113.37377,31.717497,0722;422800,恩施土家族苗族自治州,Enshi,109.48699,30.283114,0718;429004,仙桃市,Xiantao,113.453974,30.364953,0728;429005,潜江市,Qianjiang,112.896866,30.421215,2728;429006,天门市,Tianmen,113.165862,30.653061,1728;429021,神农架林区,Shennongjia,110.671525,31.744449,1719",
+		"430000": "430100,长沙市,Changsha,112.982279,28.19409,0731;430200,株洲市,Zhuzhou,113.151737,27.835806,0733;430300,湘潭市,Xiangtan,112.925083,27.846725,0732;430400,衡阳市,Hengyang,112.607693,26.900358,0734;430500,邵阳市,Shaoyang,111.46923,27.237842,0739;430600,岳阳市,Yueyang,113.132855,29.37029,0730;430700,常德市,Changde,111.691347,29.040225,0736;430800,张家界市,Zhangjiajie,110.479921,29.127401,0744;430900,益阳市,Yiyang,112.355042,28.570066,0737;431000,郴州市,Chenzhou,113.032067,25.793589,0735;431100,永州市,Yongzhou,111.608019,26.434516,0746;431200,怀化市,Huaihua,109.97824,27.550082,0745;431300,娄底市,Loudi,112.008497,27.728136,0738;433100,湘西土家族苗族自治州,Xiangxi,109.739735,28.314296,0743",
+		"440000": "440100,广州市,Guangzhou,113.280637,23.125178,020;440200,韶关市,Shaoguan,113.591544,24.801322,0751;440300,深圳市,Shenzhen,114.085947,22.547,0755;440400,珠海市,Zhuhai,113.552724,22.255899,0756;440500,汕头市,Shantou,116.708463,23.37102,0754;440600,佛山市,Foshan,113.122717,23.028762,0757;440700,江门市,Jiangmen,113.094942,22.590431,0750;440800,湛江市,Zhanjiang,110.405529,21.195338,0759;440900,茂名市,Maoming,110.919229,21.659751,0668;441200,肇庆市,Zhaoqing,112.472529,23.051546,0758;441300,惠州市,Huizhou,114.412599,23.079404,0752;441400,梅州市,Meizhou,116.117582,24.299112,0753;441500,汕尾市,Shanwei,115.364238,22.774485,0660;441600,河源市,Heyuan,114.697802,23.746266,0762;441700,阳江市,Yangjiang,111.975107,21.859222,0662;441800,清远市,Qingyuan,113.036779,23.704188,0763;441900,东莞市,Dongguan,113.760234,23.048884,0769;442000,中山市,Zhongshan,113.382391,22.521113,0760;445100,潮州市,Chaozhou,116.632301,23.661701,0768;445200,揭阳市,Jieyang,116.355733,23.543778,0663;445300,云浮市,Yunfu,112.044439,22.929801,0766",
+		"450000": "450100,南宁市,Nanning,108.320004,22.82402,0771;450200,柳州市,Liuzhou,109.411703,24.314617,0772;450300,桂林市,Guilin,110.299121,25.274215,0773;450400,梧州市,Wuzhou,111.316229,23.472309,0774;450500,北海市,Beihai,109.119254,21.473343,0779;450600,防城港市,Fangchenggang,108.345478,21.614631,0770;450700,钦州市,Qinzhou,108.624175,21.967127,0777;450800,贵港市,Guigang,109.602146,23.0936,1755;450900,玉林市,Yulin,110.154393,22.63136,0775;451000,百色市,Baise,106.616285,23.897742,0776;451100,贺州市,Hezhou,111.552056,24.414141,1774;451200,河池市,Hechi,108.062105,24.695899,0778;451300,来宾市,Laibin,109.229772,23.733766,1772;451400,崇左市,Chongzuo,107.353926,22.404108,1771",
+		"460000": "460100,海口市,Haikou,110.33119,20.031971,0898;460200,三亚市,Sanya,109.508268,18.247872,0899;460300,三沙市,Sansha,112.34882,16.831039,2898;460321,西沙群岛,Xisha Islands,112.025528,16.331342,1895;460322,南沙群岛,Nansha Islands,116.749998,11.471888,1891;460323,中沙群岛的岛礁及其海域,Zhongsha Islands,117.740071,15.112856,2801;469001,五指山市,Wuzhishan,109.516662,18.776921,1897;469002,琼海市,Qionghai,110.466785,19.246011,1894;469003,儋州市,Danzhou,109.576782,19.517486,0805;469005,文昌市,Wenchang,110.753975,19.612986,1893;469006,万宁市,Wanning,110.388793,18.796216,1898;469007,东方市,Dongfang,108.653789,19.10198,0807;469021,定安县,Ding'an,110.323959,19.699211,0806;469022,屯昌县,Tunchang,110.102773,19.362916,1892;469023,澄迈县,Chengmai,110.007147,19.737095,0804;469024,临高县,Lingao,109.687697,19.908293,1896;469025,白沙黎族自治县,Baisha,109.452606,19.224584,0802;469026,昌江黎族自治县,Changjiang,109.053351,19.260968,0803;469027,乐东黎族自治县,Ledong,109.175444,18.74758,2802;469028,陵水黎族自治县,Lingshui,110.037218,18.505006,0809;469029,保亭黎族苗族自治县,Baoting,109.70245,18.636371,0801;469030,琼中黎族苗族自治县,Qiongzhong,109.839996,19.03557,1899",
+		"500000": "",
+		"510000": "510100,成都市,Chengdu,104.065735,30.659462,028;510300,自贡市,Zigong,104.773447,29.352765,0813;510400,攀枝花市,Panzhihua,101.716007,26.580446,0812;510500,泸州市,Luzhou,105.443348,28.889138,0830;510600,德阳市,Deyang,104.398651,31.127991,0838;510700,绵阳市,Mianyang,104.741722,31.46402,0816;510800,广元市,Guangyuan,105.829757,32.433668,0839;510900,遂宁市,Suining,105.571331,30.513311,0825;511000,内江市,Neijiang,105.066138,29.58708,1832;511100,乐山市,Leshan,103.761263,29.582024,0833;511300,南充市,Nanchong,106.082974,30.795281,0817;511400,眉山市,Meishan,103.831788,30.048318,1833;511500,宜宾市,Yibin,104.630825,28.760189,0831;511600,广安市,Guang'an,106.633369,30.456398,0826;511700,达州市,Dazhou,107.502262,31.209484,0818;511800,雅安市,Ya'an,103.001033,29.987722,0835;511900,巴中市,Bazhong,106.753669,31.858809,0827;512000,资阳市,Ziyang,104.641917,30.122211,0832;513200,阿坝藏族羌族自治州,Aba,102.221374,31.899792,0837;513300,甘孜藏族自治州,Garze,101.963815,30.050663,0836;513400,凉山彝族自治州,Liangshan,102.258746,27.886762,0834",
+		"520000": "520100,贵阳市,Guiyang,106.713478,26.578343,0851;520200,六盘水市,Liupanshui,104.846743,26.584643,0858;520300,遵义市,Zunyi,106.937265,27.706626,0852;520400,安顺市,Anshun,105.932188,26.245544,0853;520500,毕节市,Bijie,105.28501,27.301693,0857;520600,铜仁市,Tongren,109.191555,27.718346,0856;522300,黔西南布依族苗族自治州,Qianxinan,104.897971,25.08812,0859;522600,黔东南苗族侗族自治州,Qiandongnan,107.977488,26.583352,0855;522700,黔南布依族苗族自治州,Qiannan,107.517156,26.258219,0854",
+		"530000": "530100,昆明市,Kunming,102.712251,25.040609,0871;530300,曲靖市,Qujing,103.797851,25.501557,0874;530400,玉溪市,Yuxi,102.543907,24.350461,0877;530500,保山市,Baoshan,99.167133,25.111802,0875;530600,昭通市,Zhaotong,103.717216,27.336999,0870;530700,丽江市,Lijiang,100.233026,26.872108,0888;530800,普洱市,Pu'er,100.972344,22.777321,0879;530900,临沧市,Lincang,100.08697,23.886567,0883;532300,楚雄彝族自治州,Chuxiong,101.546046,25.041988,0878;532500,红河哈尼族彝族自治州,Honghe,103.384182,23.366775,0873;532600,文山壮族苗族自治州,Wenshan,104.24401,23.36951,0876;532800,西双版纳傣族自治州,Xishuangbanna,100.797941,22.001724,0691;532900,大理白族自治州,Dali,100.240037,25.592765,0872;533100,德宏傣族景颇族自治州,Dehong,98.578363,24.436694,0692;533300,怒江傈僳族自治州,Nujiang,98.854304,25.850949,0886;533400,迪庆藏族自治州,Deqen,99.706463,27.826853,0887",
+		"540000": "540100,拉萨市,Lhasa,91.132212,29.660361,0891;542100,昌都地区,Qamdo,97.178452,31.136875,0895;542200,山南地区,Shannan,91.766529,29.236023,0893;542300,日喀则地区,Shigatse,88.885148,29.267519,0892;542400,那曲地区,Nagqu,92.060214,31.476004,0896;542500,阿里地区,Ngari,80.105498,32.503187,0897;542600,林芝地区,Nyingchi,94.362348,29.654693,0894",
+		"610000": "610100,西安市,Xi'an,108.948024,34.263161,029;610200,铜川市,Tongchuan,108.963122,34.90892,0919;610300,宝鸡市,Baoji,107.14487,34.369315,0917;610400,咸阳市,Xianyang,108.705117,34.333439,0910;610500,渭南市,Weinan,109.502882,34.499381,0913;610600,延安市,Yan'an,109.49081,36.596537,0911;610700,汉中市,Hanzhong,107.028621,33.077668,0916;610800,榆林市,Yulin,109.741193,38.290162,0912;610900,安康市,Ankang,109.029273,32.6903,0915;611000,商洛市,Shangluo,109.939776,33.868319,0914",
+		"620000": "620100,兰州市,Lanzhou,103.823557,36.058039,0931;620200,嘉峪关市,Jiayuguan,98.277304,39.786529,1937;620300,金昌市,Jinchang,102.187888,38.514238,0935;620400,白银市,Baiyin,104.173606,36.54568,0943;620500,天水市,Tianshui,105.724998,34.578529,0938;620600,武威市,Wuwei,102.634697,37.929996,1935;620700,张掖市,Zhangye,100.455472,38.932897,0936;620800,平凉市,Pingliang,106.684691,35.54279,0933;620900,酒泉市,Jiuquan,98.510795,39.744023,0937;621000,庆阳市,Qingyang,107.638372,35.734218,0934;621100,定西市,Dingxi,104.626294,35.579578,0932;621200,陇南市,Longnan,104.929379,33.388598,2935;622900,临夏回族自治州,Linxia,103.212006,35.599446,0930;623000,甘南藏族自治州,Gannan,102.911008,34.986354,0941",
+		"630000": "630100,西宁市,Xining,101.778916,36.623178,0971;632100,海东地区,Haidong,102.10327,36.502916,0972;632200,海北藏族自治州,Haibei,100.901059,36.959435,0970;632300,黄南藏族自治州,Huangnan,102.019988,35.517744,0973;632500,海南藏族自治州,Hainan,100.619542,36.280353,0974;632600,果洛藏族自治州,Golog,100.242143,34.4736,0975;632700,玉树藏族自治州,Yushu,97.008522,33.004049,0976;632800,海西蒙古族藏族自治州,Haixi,97.370785,37.374663,0977",
+		"640000": "640100,银川市,Yinchuan,106.278179,38.46637,0951;640200,石嘴山市,Shizuishan,106.376173,39.01333,0952;640300,吴忠市,Wuzhong,106.199409,37.986165,0953;640400,固原市,Guyuan,106.285241,36.004561,0954;640500,中卫市,Zhongwei,105.189568,37.514951,1953",
+		"650000": "650100,乌鲁木齐市,Urumqi,87.617733,43.792818,0991;650200,克拉玛依市,Karamay,84.873946,45.595886,0990;652100,吐鲁番地区,Turpan,89.184078,42.947613,0995;652200,哈密地区,Kumul,93.51316,42.833248,0902;652300,昌吉回族自治州,Changji,87.304012,44.014577,0994;652700,博尔塔拉蒙古自治州,Bortala,82.074778,44.903258,0909;652800,巴音郭楞蒙古自治州,Bayingol,86.150969,41.768552,0996;652900,阿克苏地区,Aksu,80.265068,41.170712,0997;653000,克孜勒苏柯尔克孜自治州,Kizilsu,76.172825,39.713431,0908;653100,喀什地区,Kashgar,75.989138,39.467664,0998;653200,和田地区,Hotan,79.92533,37.110687,0903;654000,伊犁哈萨克自治州,Ili,81.317946,43.92186,0999;654200,塔城地区,Qoqek,82.985732,46.746301,0901;654300,阿勒泰地区,Altay,88.13963,47.848393,0906;659001,石河子市,Shihezi,86.041075,44.305886,0993;659002,阿拉尔市,Aral,81.285884,40.541914,1997;659003,图木舒克市,Tumxuk,79.077978,39.867316,1998;659004,五家渠市,Wujiaqu,87.526884,44.167401,1994",
+		"710000": "",
+		"810000": "",
+		"820000": ""
+	};
+	var allcities = "100000,全国,China,116.3683244,39.915085,;110000,北京市,Beijing,116.405285,39.904989,010;120000,天津市,Tianjin,117.190182,39.125596,022;130000,河北省,Hebei,114.502461,38.045474,;140000,山西省,Shanxi,112.549248,37.857014,;150000,内蒙古自治区,Inner Mongolia,111.670801,40.818311,;210000,辽宁省,Liaoning,123.429096,41.796767,;220000,吉林省,Jilin,125.3245,43.886841,;230000,黑龙江省,Heilongjiang,126.642464,45.756967,;310000,上海市,Shanghai,121.472644,31.231706,021;320000,江苏省,Jiangsu,118.767413,32.041544,;330000,浙江省,Zhejiang,120.153576,30.287459,;340000,安徽省,Anhui,117.283042,31.86119,;350000,福建省,Fujian,119.306239,26.075302,;360000,江西省,Jiangxi,115.892151,28.676493,;370000,山东省,Shandong,117.000923,36.675807,;410000,河南省,Henan,113.665412,34.757975,;420000,湖北省,Hubei,114.298572,30.584355,;430000,湖南省,Hunan,112.982279,28.19409,;440000,广东省,Guangdong,113.280637,23.125178,;450000,广西壮族自治区,Guangxi,108.320004,22.82402,;460000,海南省,Hainan,110.33119,20.031971,;500000,重庆市,Chongqing,106.504962,29.533155,023;510000,四川省,Sichuan,104.065735,30.659462,;520000,贵州省,Guizhou,106.713478,26.578343,;530000,云南省,Yunnan,102.712251,25.040609,;540000,西藏自治区,Tibet,91.132212,29.660361,;610000,陕西省,Shaanxi,108.948024,34.263161,;620000,甘肃省,Gansu,103.823557,36.058039,;630000,青海省,Qinghai,101.778916,36.623178,;640000,宁夏回族自治区,Ningxia,106.278179,38.46637,;650000,新疆维吾尔自治区,Xinjiang,87.617733,43.792818,;810000,香港特別行政區,Hong Kong,114.173355,22.320048,1852;820000,澳門特別行政區,Macau,113.54909,22.198951,1853;710000,台湾省,Taiwan Province,121.509062,25.044332,1886;";
+
+var provinceList = [], provinceObj = {}, cityObj={}, i,len, j, jl, temp, provinceStrList = allcities.split(";"), stringDetail;
+var otherProvince = {code:"718182", cities:[], label:"其他", name:"其他"}, isOtherProvince, province;
+var regProvince = /省|市|壮|回|维|自/, regCity = /市$/, html;
+	var hotCityName = ['北京','上海','广州','深圳','成都','沈阳','苏州','郑州','青岛','天津','重庆','武汉','杭州','西安','南京','大连','长沙'];
+for(i = 0, len = provinceStrList.length; i < len; i++){
+	stringDetail = provinceStrList[i].split(",");
+	if(stringDetail.length && stringDetail[0] > 110000 - 1){
+		isOtherProvince = stringDetail[0] > 710000 - 1;
+		temp = isOtherProvince ? stringDetail[1].substr(0,2):stringDetail[1].substr(0, 3).replace(regProvince, "");
+		province = {code: stringDetail[0], label: stringDetail[1], name: temp, cities:[], lng: stringDetail[3], lat: stringDetail[4]};
+		if(isOtherProvince){
+			otherProvince.cities.push(province);
+			cityObj[stringDetail[0]]= cityObj[province.name] = province;
+		}
+		else{
+			provinceList.push(province);
+			provinceObj[stringDetail[0]] = provinceObj[stringDetail[1]] = provinceObj[province.name] = province;
+			cityObj[stringDetail[0]] = cityObj[stringDetail[1]] = cityObj[province.name] = province;
+		}
+	}
+}
+
+	provinceList.sort(function(p1, p2){
+		return p1.name.charCodeAt(0) == p2.name.charCodeAt(0) ? p1.name.charCodeAt(1) - p2.name.charCodeAt(1) : p1.name.charCodeAt(0) - p2.name.charCodeAt(0);
+	});
+
+	provinceList.push(otherProvince);
+	provinceObj[718182] = otherProvince;
+
+	for(i in cities){
+		if(cities[i]){
+			stringDetail = cities[i].split(";");
+			for(j = 0, jl = stringDetail.length; j < jl; j++){
+				temp = stringDetail[j].split(",");
+				province = {code:temp[0], label: temp[1], name: temp[1].replace(regCity, ""), lng: temp[3], lat: temp[4]};
+				cityObj[temp[0]] = cityObj[temp[1]] = cityObj[province.name] = province;
+				provinceObj[i].cities.push(province);
+			}
+		}
+	}
+
+	for(html = [], i = 0, len = hotCityName.length; i < len; i++){
+		temp = cityObj[hotCityName[i]] || provinceObj[hotCityName[i]];
+		html.push('<a href="javascript:;">', temp.name ,'</a>');
+	}
+	$("#tdHotCities").html(html.join(""));
+
+	for(html = [], i = 0, len = provinceList.length; i < len; i++){
+		temp = provinceList[i];
+		if(temp.cities.length < 2){ continue; }
+		html.push('<tr><th>', temp.name ,'</th><td>');
+		for(j = 0, jl = temp.cities.length; j < jl; j++){
+			html.push('<a href="javascript:;">', temp.cities[j].name, '</a>')
+		}
+		html.push('</td></tr>');
+	}
+	$("#tbodyAllCities").html(html.join(""));
+	MA.cityObj = cityObj;
+
+	var $body = $(document.body),
+		fnClickAllCity = function(){
+			$body.off("click", fnClickAllCity);
+			$allCitys.addClass("hide");
+			$btnCurrentCity.removeClass("open");
+		},
+
+	$btnCurrentCity = $("#btnCurrentCity").on("click", function(){
+		$body.off("click", fnClickAllCity);
+		setTimeout(function(){ $body.on("click", fnClickAllCity); }, 9);
+		$allCitys.removeClass("hide");
+		$btnCurrentCity.addClass("open");
+	}),
+
+	 $allCitys = $("#allCityList").on("click", function(e){
+		var a = e.target;
+		e.stopPropagation();
+		if(a.tagName == "A"){
+			fnClickAllCity();
+			if(!/close-icon/.test(a.className)){
+				MA.setCurrentCity(a.innerHTML);
+			}
+		}
+	});
+}();
+
+!function(a,b,c){a.fn.jScrollPane=function(d){function e(d,e){function f(b){var e,h,j,l,m,n,q=!1,r=!1;if(P=b,Q===c)m=d.scrollTop(),n=d.scrollLeft(),d.css({overflow:"hidden",padding:0}),R=d.innerWidth()+tb,S=d.innerHeight(),d.width(R),Q=a('<div class="jspPane" />').css("padding",sb).append(d.children()),T=a('<div class="jspContainer" />').css({width:R+"px",height:S+"px"}).append(Q).appendTo(d);else{if(d.css("width",""),q=P.stickToBottom&&C(),r=P.stickToRight&&D(),l=d.innerWidth()+tb!=R||d.outerHeight()!=S,l&&(R=d.innerWidth()+tb,S=d.innerHeight(),T.css({width:R+"px",height:S+"px"})),!l&&ub==U&&Q.outerHeight()==V)return d.width(R),void 0;ub=U,Q.css("width",""),d.width(R),T.find(">.jspVerticalBar,>.jspHorizontalBar").remove().end()}Q.css("overflow","auto"),U=b.contentWidth?b.contentWidth:Q[0].scrollWidth,V=Q[0].scrollHeight,Q.css("overflow",""),W=U/R,X=V/S,Y=X>1,Z=W>1,Z||Y?(d.addClass("jspScrollable"),e=P.maintainPosition&&(ab||db),e&&(h=A(),j=B()),g(),i(),k(),e&&(y(r?U-R:h,!1),x(q?V-S:j,!1)),H(),E(),N(),P.enableKeyboardNavigation&&J(),P.clickOnTrack&&o(),L(),P.hijackInternalLinks&&M()):(d.removeClass("jspScrollable"),Q.css({top:0,left:0,width:T.width()-tb}),F(),I(),K(),p()),P.autoReinitialise&&!rb?rb=setInterval(function(){f(P)},P.autoReinitialiseDelay):!P.autoReinitialise&&rb&&clearInterval(rb),m&&d.scrollTop(0)&&x(m,!1),n&&d.scrollLeft(0)&&y(n,!1),d.trigger("jsp-initialised",[Z||Y])}function g(){Y&&(T.append(a('<div class="jspVerticalBar" />').append(a('<div class="jspCap jspCapTop" />'),a('<div class="jspTrack" />').append(a('<div class="jspDrag" />').append(a('<div class="jspDragTop" />'),a('<div class="jspDragBottom" />'))),a('<div class="jspCap jspCapBottom" />'))),eb=T.find(">.jspVerticalBar"),fb=eb.find(">.jspTrack"),$=fb.find(">.jspDrag"),P.showArrows&&(jb=a('<a class="jspArrow jspArrowUp" />').bind("mousedown.jsp",m(0,-1)).bind("click.jsp",G),kb=a('<a class="jspArrow jspArrowDown" />').bind("mousedown.jsp",m(0,1)).bind("click.jsp",G),P.arrowScrollOnHover&&(jb.bind("mouseover.jsp",m(0,-1,jb)),kb.bind("mouseover.jsp",m(0,1,kb))),l(fb,P.verticalArrowPositions,jb,kb)),hb=S,T.find(">.jspVerticalBar>.jspCap:visible,>.jspVerticalBar>.jspArrow").each(function(){hb-=a(this).outerHeight()}),$.hover(function(){$.addClass("jspHover")},function(){$.removeClass("jspHover")}).bind("mousedown.jsp",function(b){a("html").bind("dragstart.jsp selectstart.jsp",G),$.addClass("jspActive");var c=b.pageY-$.position().top;return a("html").bind("mousemove.jsp",function(a){r(a.pageY-c,!1)}).bind("mouseup.jsp mouseleave.jsp",q),!1}),h())}function h(){fb.height(hb+"px"),ab=0,gb=P.verticalGutter+fb.outerWidth(),Q.width(R-gb-tb);try{0===eb.position().left&&Q.css("margin-left",gb+"px")}catch(a){}}function i(){Z&&(T.append(a('<div class="jspHorizontalBar" />').append(a('<div class="jspCap jspCapLeft" />'),a('<div class="jspTrack" />').append(a('<div class="jspDrag" />').append(a('<div class="jspDragLeft" />'),a('<div class="jspDragRight" />'))),a('<div class="jspCap jspCapRight" />'))),lb=T.find(">.jspHorizontalBar"),mb=lb.find(">.jspTrack"),bb=mb.find(">.jspDrag"),P.showArrows&&(pb=a('<a class="jspArrow jspArrowLeft" />').bind("mousedown.jsp",m(-1,0)).bind("click.jsp",G),qb=a('<a class="jspArrow jspArrowRight" />').bind("mousedown.jsp",m(1,0)).bind("click.jsp",G),P.arrowScrollOnHover&&(pb.bind("mouseover.jsp",m(-1,0,pb)),qb.bind("mouseover.jsp",m(1,0,qb))),l(mb,P.horizontalArrowPositions,pb,qb)),bb.hover(function(){bb.addClass("jspHover")},function(){bb.removeClass("jspHover")}).bind("mousedown.jsp",function(b){a("html").bind("dragstart.jsp selectstart.jsp",G),bb.addClass("jspActive");var c=b.pageX-bb.position().left;return a("html").bind("mousemove.jsp",function(a){t(a.pageX-c,!1)}).bind("mouseup.jsp mouseleave.jsp",q),!1}),nb=T.innerWidth(),j())}function j(){T.find(">.jspHorizontalBar>.jspCap:visible,>.jspHorizontalBar>.jspArrow").each(function(){nb-=a(this).outerWidth()}),mb.width(nb+"px"),db=0}function k(){if(Z&&Y){var b=mb.outerHeight(),c=fb.outerWidth();hb-=b,a(lb).find(">.jspCap:visible,>.jspArrow").each(function(){nb+=a(this).outerWidth()}),nb-=c,S-=c,R-=b,mb.parent().append(a('<div class="jspCorner" />').css("width",b+"px")),h(),j()}Z&&Q.width(T.outerWidth()-tb+"px"),V=Q.outerHeight(),X=V/S,Z&&(ob=Math.ceil(1/W*nb),ob>P.horizontalDragMaxWidth?ob=P.horizontalDragMaxWidth:ob<P.horizontalDragMinWidth&&(ob=P.horizontalDragMinWidth),bb.width(ob+"px"),cb=nb-ob,u(db)),Y&&(ib=Math.ceil(1/X*hb),ib>P.verticalDragMaxHeight?ib=P.verticalDragMaxHeight:ib<P.verticalDragMinHeight&&(ib=P.verticalDragMinHeight),$.height((ib-2)+"px"),_=hb-ib,s(ab))}function l(a,b,c,d){var e,f="before",g="after";"os"==b&&(b=/Mac/.test(navigator.platform)?"after":"split"),b==f?g=b:b==g&&(f=b,e=c,c=d,d=e),a[f](c)[g](d)}function m(a,b,c){return function(){return n(a,b,this,c),this.blur(),!1}}function n(b,c,d,e){d=a(d).addClass("jspActive");var f,g,h=!0,i=function(){0!==b&&vb.scrollByX(b*P.arrowButtonSpeed),0!==c&&vb.scrollByY(c*P.arrowButtonSpeed),g=setTimeout(i,h?P.initialDelay:P.arrowRepeatFreq),h=!1};i(),f=e?"mouseout.jsp":"mouseup.jsp",e=e||a("html"),e.bind(f,function(){d.removeClass("jspActive"),g&&clearTimeout(g),g=null,e.unbind(f)})}function o(){p(),Y&&fb.bind("mousedown.jsp",function(b){if(b.originalTarget===c||b.originalTarget==b.currentTarget){var d,e=a(this),f=e.offset(),g=b.pageY-f.top-ab,h=!0,i=function(){var a=e.offset(),c=b.pageY-a.top-ib/2,f=S*P.scrollPagePercent,k=_*f/(V-S);if(0>g)ab-k>c?vb.scrollByY(-f):r(c);else{if(!(g>0))return j(),void 0;c>ab+k?vb.scrollByY(f):r(c)}d=setTimeout(i,h?P.initialDelay:P.trackClickRepeatFreq),h=!1},j=function(){d&&clearTimeout(d),d=null,a(document).unbind("mouseup.jsp",j)};return i(),a(document).bind("mouseup.jsp",j),!1}}),Z&&mb.bind("mousedown.jsp",function(b){if(b.originalTarget===c||b.originalTarget==b.currentTarget){var d,e=a(this),f=e.offset(),g=b.pageX-f.left-db,h=!0,i=function(){var a=e.offset(),c=b.pageX-a.left-ob/2,f=R*P.scrollPagePercent,k=cb*f/(U-R);if(0>g)db-k>c?vb.scrollByX(-f):t(c);else{if(!(g>0))return j(),void 0;c>db+k?vb.scrollByX(f):t(c)}d=setTimeout(i,h?P.initialDelay:P.trackClickRepeatFreq),h=!1},j=function(){d&&clearTimeout(d),d=null,a(document).unbind("mouseup.jsp",j)};return i(),a(document).bind("mouseup.jsp",j),!1}})}function p(){mb&&mb.unbind("mousedown.jsp"),fb&&fb.unbind("mousedown.jsp")}function q(){a("html").unbind("dragstart.jsp selectstart.jsp mousemove.jsp mouseup.jsp mouseleave.jsp"),$&&$.removeClass("jspActive"),bb&&bb.removeClass("jspActive")}function r(a,b){Y&&(0>a?a=0:a>_&&(a=_),b===c&&(b=P.animateScroll),b?vb.animate($,"top",a,s):($.css("top",a),s(a)))}function s(a){a===c&&(a=$.position().top),T.scrollTop(0),ab=a;var b=0===ab,e=ab==_,f=a/_,g=-f*(V-S);(wb!=b||yb!=e)&&(wb=b,yb=e,d.trigger("jsp-arrow-change",[wb,yb,xb,zb])),v(b,e),Q.css("top",g),d.trigger("jsp-scroll-y",[-g,b,e]).trigger("scroll")}function t(a,b){Z&&(0>a?a=0:a>cb&&(a=cb),b===c&&(b=P.animateScroll),b?vb.animate(bb,"left",a,u):(bb.css("left",a),u(a)))}function u(a){a===c&&(a=bb.position().left),T.scrollTop(0),db=a;var b=0===db,e=db==cb,f=a/cb,g=-f*(U-R);(xb!=b||zb!=e)&&(xb=b,zb=e,d.trigger("jsp-arrow-change",[wb,yb,xb,zb])),w(b,e),Q.css("left",g),d.trigger("jsp-scroll-x",[-g,b,e]).trigger("scroll")}function v(a,b){P.showArrows&&(jb[a?"addClass":"removeClass"]("jspDisabled"),kb[b?"addClass":"removeClass"]("jspDisabled"))}function w(a,b){P.showArrows&&(pb[a?"addClass":"removeClass"]("jspDisabled"),qb[b?"addClass":"removeClass"]("jspDisabled"))}function x(a,b){var c=a/(V-S);r(c*_,b)}function y(a,b){var c=a/(U-R);t(c*cb,b)}function z(b,c,d){var e,f,g,h,i,j,k,l,m,n=0,o=0;try{e=a(b)}catch(p){return}for(f=e.outerHeight(),g=e.outerWidth(),T.scrollTop(0),T.scrollLeft(0);!e.is(".jspPane");)if(n+=e.position().top,o+=e.position().left,e=e.offsetParent(),/^body|html$/i.test(e[0].nodeName))return;h=B(),j=h+S,h>n||c?l=n-P.verticalGutter:n+f>j&&(l=n-S+f+P.verticalGutter),isNaN(l)||x(l,d),i=A(),k=i+R,i>o||c?m=o-P.horizontalGutter:o+g>k&&(m=o-R+g+P.horizontalGutter),isNaN(m)||y(m,d)}function A(){return-Q.position().left}function B(){return-Q.position().top}function C(){var a=V-S;return a>20&&a-B()<10}function D(){var a=U-R;return a>20&&a-A()<10}function E(){T.unbind(Bb).bind(Bb,function(a,b,c,d){var e=db,f=ab;return vb.scrollBy(c*P.mouseWheelSpeed,-d*P.mouseWheelSpeed,!1),e==db&&f==ab})}function F(){T.unbind(Bb)}function G(){return!1}function H(){Q.find(":input,a").unbind("focus.jsp").bind("focus.jsp",function(a){z(a.target,!1)})}function I(){Q.find(":input,a").unbind("focus.jsp")}function J(){function b(){var a=db,b=ab;switch(c){case 40:vb.scrollByY(P.keyboardSpeed,!1);break;case 38:vb.scrollByY(-P.keyboardSpeed,!1);break;case 34:case 32:vb.scrollByY(S*P.scrollPagePercent,!1);break;case 33:vb.scrollByY(-S*P.scrollPagePercent,!1);break;case 39:vb.scrollByX(P.keyboardSpeed,!1);break;case 37:vb.scrollByX(-P.keyboardSpeed,!1)}return e=a!=db||b!=ab}var c,e,f=[];Z&&f.push(lb[0]),Y&&f.push(eb[0]),Q.focus(function(){d.focus()}),d.attr("tabindex",0).unbind("keydown.jsp keypress.jsp").bind("keydown.jsp",function(d){if(d.target===this||f.length&&a(d.target).closest(f).length){var g=db,h=ab;switch(d.keyCode){case 40:case 38:case 34:case 32:case 33:case 39:case 37:c=d.keyCode,b();break;case 35:x(V-S),c=null;break;case 36:x(0),c=null}return e=d.keyCode==c&&g!=db||h!=ab,!e}}).bind("keypress.jsp",function(a){return a.keyCode==c&&b(),!e}),P.hideFocus?(d.css("outline","none"),"hideFocus"in T[0]&&d.attr("hideFocus",!0)):(d.css("outline",""),"hideFocus"in T[0]&&d.attr("hideFocus",!1))}function K(){d.attr("tabindex","-1").removeAttr("tabindex").unbind("keydown.jsp keypress.jsp")}function L(){if(location.hash&&location.hash.length>1){var b,c,d=escape(location.hash.substr(1));try{b=a("#"+d+', a[name="'+d+'"]')}catch(e){return}b.length&&Q.find(d)&&(0===T.scrollTop()?c=setInterval(function(){T.scrollTop()>0&&(z(b,!0),a(document).scrollTop(T.position().top),clearInterval(c))},50):(z(b,!0),a(document).scrollTop(T.position().top)))}}function M(){a(document.body).data("jspHijack")||(a(document.body).data("jspHijack",!0),a(document.body).delegate("a[href*=#]","click",function(c){var d,e,f,g,h,i,j=this.href.substr(0,this.href.indexOf("#")),k=location.href;if(-1!==location.href.indexOf("#")&&(k=location.href.substr(0,location.href.indexOf("#"))),j===k){d=escape(this.href.substr(this.href.indexOf("#")+1));try{e=a("#"+d+', a[name="'+d+'"]')}catch(l){return}e.length&&(f=e.closest(".jspScrollable"),g=f.data("jsp"),g.scrollToElement(e,!0),f[0].scrollIntoView&&(h=a(b).scrollTop(),i=e.offset().top,(h>i||i>h+a(b).height())&&f[0].scrollIntoView()),c.preventDefault())}}))}function N(){var a,b,c,d,e,f=!1;T.unbind("touchstart.jsp touchmove.jsp touchend.jsp click.jsp-touchclick").bind("touchstart.jsp",function(g){var h=g.originalEvent.touches[0];a=A(),b=B(),c=h.pageX,d=h.pageY,e=!1,f=!0}).bind("touchmove.jsp",function(g){if(f){var h=g.originalEvent.touches[0],i=db,j=ab;return vb.scrollTo(a+c-h.pageX,b+d-h.pageY),e=e||Math.abs(c-h.pageX)>5||Math.abs(d-h.pageY)>5,i==db&&j==ab}}).bind("touchend.jsp",function(){f=!1}).bind("click.jsp-touchclick",function(){return e?(e=!1,!1):void 0})}function O(){var a=B(),b=A();d.removeClass("jspScrollable").unbind(".jsp"),d.replaceWith(Ab.append(Q.children())),Ab.scrollTop(a),Ab.scrollLeft(b),rb&&clearInterval(rb)}var P,Q,R,S,T,U,V,W,X,Y,Z,$,_,ab,bb,cb,db,eb,fb,gb,hb,ib,jb,kb,lb,mb,nb,ob,pb,qb,rb,sb,tb,ub,vb=this,wb=!0,xb=!0,yb=!1,zb=!1,Ab=d.clone(!1,!1).empty(),Bb=a.fn.mwheelIntent?"mwheelIntent.jsp":"mousewheel.jsp";"border-box"===d.css("box-sizing")?(sb=0,tb=0):(sb=d.css("paddingTop")+" "+d.css("paddingRight")+" "+d.css("paddingBottom")+" "+d.css("paddingLeft"),tb=(parseInt(d.css("paddingLeft"),10)||0)+(parseInt(d.css("paddingRight"),10)||0)),a.extend(vb,{reinitialise:function(b){b=a.extend({},P,b),f(b)},scrollToElement:function(a,b,c){z(a,b,c)},scrollTo:function(a,b,c){y(a,c),x(b,c)},scrollToX:function(a,b){y(a,b)},scrollToY:function(a,b){x(a,b)},scrollToPercentX:function(a,b){y(a*(U-R),b)},scrollToPercentY:function(a,b){x(a*(V-S),b)},scrollBy:function(a,b,c){vb.scrollByX(a,c),vb.scrollByY(b,c)},scrollByX:function(a,b){var c=A()+Math[0>a?"floor":"ceil"](a),d=c/(U-R);t(d*cb,b)},scrollByY:function(a,b){var c=B()+Math[0>a?"floor":"ceil"](a),d=c/(V-S);r(d*_,b)},positionDragX:function(a,b){t(a,b)},positionDragY:function(a,b){r(a,b)},animate:function(a,b,c,d){var e={};e[b]=c,a.animate(e,{duration:P.animateDuration,easing:P.animateEase,queue:!1,step:d})},getContentPositionX:function(){return A()},getContentPositionY:function(){return B()},getContentWidth:function(){return U},getContentHeight:function(){return V},getPercentScrolledX:function(){return A()/(U-R)},getPercentScrolledY:function(){return B()/(V-S)},getIsScrollableH:function(){return Z},getIsScrollableV:function(){return Y},getContentPane:function(){return Q},scrollToBottom:function(a){r(_,a)},hijackInternalLinks:a.noop,destroy:function(){O()}}),f(e)}return d=a.extend({},a.fn.jScrollPane.defaults,d),a.each(["arrowButtonSpeed","trackClickSpeed","keyboardSpeed"],function(){d[this]=d[this]||d.speed}),this.each(function(){var b=a(this),c=b.data("jsp");c?c.reinitialise(d):(a("script",b).filter('[type="text/javascript"],:not([type])').remove(),c=new e(b,d),b.data("jsp",c))})},a.fn.jScrollPane.defaults={showArrows:!1,maintainPosition:!0,stickToBottom:!1,stickToRight:!1,clickOnTrack:!0,autoReinitialise:!1,autoReinitialiseDelay:500,verticalDragMinHeight:0,verticalDragMaxHeight:99999,horizontalDragMinWidth:0,horizontalDragMaxWidth:99999,contentWidth:c,animateScroll:!1,animateDuration:300,animateEase:"linear",hijackInternalLinks:!1,verticalGutter:4,horizontalGutter:4,mouseWheelSpeed:3,arrowButtonSpeed:0,arrowRepeatFreq:50,arrowScrollOnHover:!1,trackClickSpeed:0,trackClickRepeatFreq:70,verticalArrowPositions:"split",horizontalArrowPositions:"split",enableKeyboardNavigation:!0,hideFocus:!1,keyboardSpeed:0,initialDelay:300,speed:30,scrollPagePercent:.8}}(jQuery,this);
+
+(function (factory) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS style for Browserify
+        module.exports = factory;
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
+
+}));
+
+</script>
+
+    </div><!-- /.main_content -->
+
+    <div class="quick_entrance">
+
+
+    </div><!-- /.quick_entrance -->
+
+
+
+    <footer>
+        © 2002-2015 Amap.com 版权所有 | 京ICP证070711号
+    </footer>
+</div><!-- #page -->
+
+
+
+
+
+
+</body>
+</html>
+

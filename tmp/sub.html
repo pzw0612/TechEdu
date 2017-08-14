@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function selectValues(){
+   var obj = document.getElementsByName("temp");
+   var value = "";
+   for(var i = 0 ;i < obj.length ; i ++){
+        if(obj[i].checked == true)
+            value += obj[i].value;
+   }
+   window.opener.document.all.testInput.value = value;
+   window.close();
+}
+//-->
+</SCRIPT>
+</HEAD>
+<BODY>
+    <input type="checkbox" name="temp" value="A" />  A <br>
+    <input type="checkbox" name="temp" value="B"/>  B <br>
+    <input type="checkbox" name="temp" value="C" /> C <br>
+    <input type="checkbox" name="temp" value="D" />  D <br>
+    <input type="button" value="OK" onclick="selectValues()"/>
+</BODY>
+</HTML>

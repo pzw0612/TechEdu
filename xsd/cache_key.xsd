@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://com.yhd.shareservice/autoclear/cachekey" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://com.yhd.shareservice/autoclear/cachekey" 
+    elementFormDefault="unqualified">
+   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  
+	<xsd:element name="cacheKeys">
+			<xsd:complexType>
+				   <xsd:sequence>
+				       <xsd:element ref="cacheKey" minOccurs="0" maxOccurs="unbounded"/>
+				   </xsd:sequence>
+	              <xsd:attributeGroup ref="rootAttributes"></xsd:attributeGroup>
+			</xsd:complexType>
+	</xsd:element>
+
+	<xsd:attributeGroup name="rootAttributes">
+		<xsd:attribute name="namespace" type="xsd:string" use="optional"></xsd:attribute>
+	    <xsd:attribute name="version" type="xsd:string"  use="required"></xsd:attribute>
+   </xsd:attributeGroup>
+   
+
+	<xsd:element name="cacheKey">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="identifiedType">
+					<xsd:group ref="cacheKeyElements"/>
+					<xsd:attributeGroup ref="cacheKeyAttributes"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="identifiedType" abstract="true">
+		<xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:group name="cacheKeyElements">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element ref="argument"/>
+				<xsd:element ref="values" minOccurs="0"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:attributeGroup name="cacheKeyAttributes">
+         <xsd:attribute name="prefix" type="xsd:string" use="optional"></xsd:attribute>
+	    <xsd:attribute name="isUsePrefixVersion" type="isUseType" use="optional"></xsd:attribute>
+   </xsd:attributeGroup>
+   
+	<xsd:element name="argument">
+	    <xsd:complexType>
+	        <xsd:attribute name="name" type="xsd:string" use="required"></xsd:attribute>
+	        <xsd:attribute name="table" type="xsd:string" use="required"></xsd:attribute>
+	        <xsd:attribute name="column" type="xsd:string" use="required"></xsd:attribute>
+	        <xsd:attribute name="isUseValueVersion" type="isUseType" use="optional"></xsd:attribute>
+	        <xsd:attribute name="isUseNameVersion" type="isUseType" use="optional"></xsd:attribute>
+	    </xsd:complexType>
+	</xsd:element>
+	
+	<xsd:simpleType name="isUseType">
+		  <xsd:restriction base="xsd:string">
+			    <xsd:enumeration value="true"/>
+			    <xsd:enumeration value="false"/>
+			    <xsd:enumeration value=""/>
+		  </xsd:restriction>
+   </xsd:simpleType>
+
+	<xsd:element name="values" >
+	    <xsd:complexType>
+	        <xsd:sequence>
+	           <xsd:element ref="value" maxOccurs="unbounded"></xsd:element>
+	        </xsd:sequence>
+	    </xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="value">
+	    <xsd:complexType>
+	        <xsd:attribute name="table" type="xsd:string" use="required"></xsd:attribute>
+	        <xsd:attribute name="column" type="xsd:string" use="required"></xsd:attribute>
+	    </xsd:complexType>
+	</xsd:element>
+</xsd:schema>

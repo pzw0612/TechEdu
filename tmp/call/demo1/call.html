@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html>
+ <head>
+  <title> call-apply </title>
+ </head>
+
+ <body>
+  <input type="text" id="idTxt" value="input text">
+
+  <script type="text/javascript">
+   var value = "global var";
+
+   function mFunc()
+   {
+    this.value = "member var";
+   }
+
+   function gFunc()
+   {
+    alert(this.value);
+   }  
+
+   window.gFunc();         // show gFunc, global var
+   gFunc.call(window);        // show gFunc, global var
+   gFunc.call(new mFunc());      // show mFunc, member var
+   gFunc.call(document.getElementById('idTxt')); // show element, input text
+  </script>
+
+  <script type="text/javascript">
+   var func = new function()
+   {
+    this.a = "func";
+   }
+
+   var func2 = function(x)
+   {
+    var a = "func2";
+    alert(this.a);    
+    alert(x);
+   }
+
+   func2.call(func, "func2");      // show func and func2
+  </script>
+ </body>
+</html>

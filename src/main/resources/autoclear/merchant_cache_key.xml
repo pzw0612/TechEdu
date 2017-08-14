@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cacheKeys xmlns="http://com.yhd.shareservice/autoclear/cachekey"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+        xsi:schemaLocation="http://com.yhd.shareservice/autoclear/cachekey 
+             http://com.yhd.shareservice/autoclear/cachekey/cache_key.xsd"  
+        version="1.0">  
+    <!-- 例子 pss_queryBaseMerchantById_id_%1% -->
+	<cacheKey id="queryBaseMerchantById">
+		<argument name="id" table="merchant" column="id"/>
+		<values>
+		    <value table="Merchant" column="ID"/>
+			<value table="Merchant" column="IS_YIHAODIAN"/>
+			<value table="Merchant" column="MERCHANT_COMPANY_NAME"/>
+			<value table="Merchant" column="MERCHANT_NAME"/>
+			<value table="Merchant" column="MERCHANT_CODE"/>
+			<value table="Merchant" column="IS_TRANSFER_INCOME"/>
+			<value table="Merchant" column="SBY_TYPE"/>
+			<value table="Merchant" column="FETCH_PROVINCE_ID"/>
+			<value table="Merchant" column="FETCH_CITY_ID"/>
+			<value table="Merchant" column="FETCH_COUNTY_ID"/>
+			<value table="Merchant" column="FETCH_DETAIL_ADDRESS"/>
+			<value table="Merchant" column="MERCHANT_ADD"/>
+			<value table="Merchant" column="LINKMAN_NAME"/>
+			<value table="Merchant" column="LINKMAN_TEL"/>
+			<value table="Merchant" column="SUPPORT_SALE_TYPE"/>
+			<value table="Merchant" column="STORE_TYPE_ID"/>
+			<value table="Merchant" column="SUPPLIER_ID"/>
+			<value table="Merchant" column="INVOICE_TYPE"/>
+			<value table="Merchant" column="IS_SUPPORT_CONTRACT"/>
+			<value table="Merchant" column="IS_DELETE"/>
+			<value table="Merchant" column="MERCHANT_STATUS"/>
+			<value table="Merchant" column="LINKMAN_EMAIL"/>
+			<value table="Merchant" column="CREAT_TIME"/>
+			<value table="Merchant" column="VALIDATE_TIME"/>
+		</values>
+	</cacheKey>
+	
+	<!-- 示例 pss_queryProvinceIdByMerchantId_id_%2% -->
+	<cacheKey id="queryProvinceIdByMerchantId">
+		<argument name="id" table="MERCHANT_AREA" column="MERCHANT_ID"/>
+		<values>
+		    <value table="MERCHANT_AREA" column="PROVINCE_ID"/>
+		</values>
+	</cacheKey>
+	
+	<cacheKey id="queryMerchantIdAndProvinceIdByMerchantIds">
+		<argument name="id" table="MERCHANT_AREA" column="MERCHANT_ID"/>
+		<values>
+		    <value table="MERCHANT_AREA" column="PROVINCE_ID"/>
+		    <value table="MERCHANT_AREA" column="MERCHANT_ID"/>
+		</values>
+	</cacheKey>
+	
+	<cacheKey id="querySimpleMerchantAndMerchantAreaByMerchantIds">
+		<argument name="id" table="merchant" column="id"/>
+	</cacheKey>
+	<cacheKey id="queryProvinceIdAndMerchantIdAndIsYihaodianByMerchantIds">
+		<argument name="id" table="merchant" column="id"/>
+	</cacheKey>
+	<cacheKey id="queryMerchantCodAreaByBaseCondition">
+		<argument name="merchantId" table="merchant_cod_area" column="merchant_id"/>
+		<argument name="countyId" table="merchant_cod_area" column="county_id"/>
+	</cacheKey>
+	
+</cacheKeys>

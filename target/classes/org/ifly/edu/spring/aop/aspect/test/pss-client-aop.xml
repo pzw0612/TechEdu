@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+		
+
+    
+   
+
+    <bean id="msgIntercepte" class="org.ifly.edu.spring.aop.aspect.test.AopTest">
+
+    </bean>
+    
+    <bean id="testBean" class="org.ifly.edu.spring.aop.MethodInterceptor.InterfaceImpl">
+
+    </bean>
+    
+    <bean id="helloAop" class="org.ifly.edu.spring.aop.aspect.test.sub.HelloAop">
+
+    </bean>
+    <bean id="hello2Aop" class="org.ifly.edu.spring.aop.aspect.test.Hello2Aop">
+
+    </bean>
+    
+    <bean id="arrTest" class="java.util.ArrayList" >
+
+    </bean>
+    
+ 	<aop:config>  
+<!-- 		<aop:pointcut expression="execution(public * org.ifly..aop..*(..))" id="poolPointCut3"/> -->
+<!-- 		<aop:pointcut expression="execution(public * org.ifly..*(..))" id="poolPointCut3"/> -->
+		<aop:pointcut expression="execution(public * org.ifly..aop..test..*(..))" id="poolPointCut3"/>
+		
+		<aop:pointcut expression="execution(public * java.util.ArrayList.*(..))" id="javaAA"/>
+		
+		<aop:aspect id="msgIntercepteAspect" ref="msgIntercepte" order="1">
+			<aop:after-throwing pointcut-ref="poolPointCut3" method="doAction" throwing="ex"/>
+		</aop:aspect>
+		
+		<aop:aspect id="msgIntercepteAspect2" ref="msgIntercepte" order="1">
+			<aop:after-throwing pointcut-ref="javaAA" method="doAction" throwing="ex"/>
+		</aop:aspect>
+        
+	</aop:config> 
+	
+	<!-- 以上是权限认证增加的 -->
+	
+
+</beans>

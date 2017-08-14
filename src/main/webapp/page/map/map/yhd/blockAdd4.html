@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>添加block</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript" src="http://lbs.amap.com/wp-content/themes/apiwebsite/js/jquery-1.9.1.min.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.3&key=f20db5501b07e183ffcdb560cf0ab801&plugin=AMap.MouseTool,AMap.PolyEditor"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+
+	<style type="text/css" >
+
+		    #wrapper { margin: 0 auto; font-size:12px; height: 500px;}
+           
+            #bSideLeft { float: left; width: 75%; height: 100%; border: 1px solid #E0EDF4; background-color: #FFF; }
+           
+            #bSideRight { float: right; width:20%; height: 100%; overflow: auto;  padding:20px 15px; position: relative;}
+	        
+	        #container { width: 100%; height: 100%; border: 1px #DDD solid; margin: 0 auto; position: relative; }
+	                    
+	        .clear { clear: both; float: none; font-size: 0; height: 0; }
+	        .hide { display: none !important; }
+	        
+	        
+	         /* 定位相关 */
+            #locationContent{ position: relative; }
+            #locationContent .select-city{ height: 30px; line-height: 28px; position: relative; z-index: 2;}
+            #btnCurrentCity{ text-decoration: none; color:#333;
+            display: inline-block; height: 28px; padding: 0 28px 0 15px; background:#FFF url(/console/public/show/bg.32.png) right -288px no-repeat; border:1px solid #999; }
+            #btnCurrentCity.open{ border-bottom-color:#FFF; position: absolute; z-index: 4; *top:0;/* IE7-BUG */ }
+            #allCityList{ position: absolute; top:29px; left:0;/* IE8 BUG */ height: 300px; background: #FFF; border:1px solid #999; line-height: 150%; padding: 5px 12px; z-index: 3; }
+            #closeCityHolder{ height: 29px; line-height: 30px; border-bottom: 1px solid #999; }
+            #closeCityHolder a{ float: right; width:16px; height: 29px; _display:inline-block;background: url(/console/public/show/bg.32.png) -45px -240px no-repeat; }
+            #allCityListSelect{ height: 260px; padding: 8px 0 2px; overflow: auto; }
+            #allCityList th{ width:40px; font-weight: normal; vertical-align: top; padding:2px 0 0; }
+            #tbodyAllCities td{ padding:2px 0; }
+            #allCityListSelect{ border-spacing: 0;}
+            #allCityListSelect a{ display: inline-block; margin-right: 10px; padding: 1px; color: #0075C2; text-decoration: none; }
+
+            #searchArea{ margin: 10px 0 0; position: relative; }
+            #searchArea input{ height: 26px; padding: 0 5px; width:180px; *line-height: 26px; line-height: 26px\0; }
+            #btnGoSearch { display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; padding: 0 18px; font-weight: bold; background-color: #0075C2; float:right; /* IE7 对齐BUG */text-decoration: none; }
+            #btnGoSearch:hover, #btnGoSearch:focus { background-color: #3391CE; }
+            #searchSugList{ position: absolute; top:30px; width:220px; border:1px solid #999; border-top:none; }
+            #searchSugList a{ display: block; padding: 0 8px; word-wrap: break-word; word-break: break-all; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; height: 28px; line-height: 28px; text-decoration: none;color: #666; }
+            #searchSugList .selected, #searchSugList a:hover, #searchSugList a:focus{ background-color: #E3EAF2; }
+            #searchSugList span{ color:#557495; }
+            
+            
+            /** block 信息 **/
+            #blockContent{ margin: 10px 0 0; position: relative; }
+            #blockContent input{ height: 26px; padding: 0 5px; width:180px; *line-height: 26px; line-height: 26px\0; }
+            #blockContent textarea{ height: 70px; padding: 0 5px; width:180px; *line-height: 70px; line-height: 70px\0; }
+            
+            #blockContent .select-city{ height: 30px; line-height: 28px; position: relative; z-index: 2;}
+              
+            #btnAddBlock { display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; padding: 0 18px; font-weight: bold; background-color: #0075C2; float:left; /* IE7 对齐BUG */text-decoration: none; }
+            #btnAddBlock:hover, #btnAddBlock:focus { background-color: #3391CE; }
+       
+            #btnAddBlockToList { display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; padding: 0 18px; font-weight: bold; background-color: #0075C2; float:left; /* IE7 对齐BUG */text-decoration: none; }
+            #btnAddBlockToList:hover, #btnAddBlockToList:focus { background-color: #3391CE; }
+            
+            #blockContent div {margin: 3px 0}
+           
+                     
+           /** block 明细列表 **/
+            #blockContentList {margin:  10px;}
+            table.block-list-style { width: 100%; border-collapse: collapse; }
+            table.block-list-style th, table.block-list-style td { border: 1px solid #EEE; padding: 7px 0 8px;  font-size: 13px;}
+            table.block-list-style tr.first-child th, table.block-list-style tr.first-child td { padding-top: 0; }
+            table.block-list-style tr:last-child th, table.block-list-style tr:last-child td {border-bottom: none;}
+            table.block-list-style th { width: 80px; vertical-align: middle; }
+          
+            table.block-list-style .th-1 {width:30px;}
+            table.block-list-style .th-2 {width:100px;}
+            table.block-list-style .th-3 {width:150px;}
+            table.block-list-style .th-4 {width:50px;}
+            table.block-list-style .th-5 {width:60px;}
+            table.block-list-style .th-5 {width:60px;}
+
+            table.block-list-style .modify-btn{ 
+                    display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; 
+                    padding: 0 18px; font-weight: bold; 
+                    background-color: #0075C2;  text-decoration: none; }
+             table.block-list-style .modify-btn:hover, table.block-list-style .modify-btn:focus { background-color: #3391CE; }
+             
+            table.block-list-style .delet-btn{ 
+                    display: inline-block; height: 30px; color:#FFF!important; line-height: 30px; 
+                    padding: 0 18px; font-weight: bold; 
+                    background-color: #0075C2;  text-decoration: none; }
+             table.block-list-style .delet-btn:hover, table.block-list-style .delet-btn:focus { background-color: #3391CE; }
+
+    
+            footer { margin: 20px 10px;}
+	    </style>
+</head>
+<body>
+        <div id="wrapper">
+            <div id="bSideLeft">
+                <div id="container"></div>
+            </div>
+            <div id="bSideRight">
+                        <div id="locationContent">
+                            <div class="select-city">
+                                <span>当前城市：</span><a href="javascript:;" id="btnCurrentCity">上海市</a>
+                                <div id="allCityList" class="hide">
+                                    <div id="closeCityHolder"><a href="javascript:;" title="关闭"></a>选择城市</div>
+                                    <div id="allCityListSelect">
+                                        <div id="tdHotCities"></div>
+                                        <table>
+                                            <tbody>
+                                            <tr><td colspan="2">城市列表</td>	</tr>
+                                            </tbody>
+                                            <tbody id="tbodyAllCities"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="searchArea">
+                                <div>
+                                    <a href="javascript:;" id="btnGoSearch" title="查询当前地点">查找</a>
+                                    <input type="text" id="txtSearchLocation" placeholder="输入地点快速定位">
+                                </div>
+                                <div id="searchSugList" class="hide"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="blockContent">
+                            <div class="select-city">
+                                <a href="javascript:;" id="btnAddBlock">绘制区域地图</a>
+                            </div>
+                             <div>
+                                 <input type="text" id="signName" placeholder="输入标记名">
+                             </div>                    
+                             <div>
+                                 <input type="text" id="deliverArea" placeholder="输入配送区域">
+                             </div>                 
+                             <div>
+                                 <textarea id="path" disabled="disabled" placeholder="节点数组"></textarea>
+                             </div>  
+                             
+                            <div class="select-city">
+                                <a href="javascript:;" id="btnAddBlockToList">加入block信息列表</a>
+                            </div>             
+                        </div>
+                       <table class="map-style">
+                            <tr class="map-status">
+                                <th><div>操作</div></th>
+                                <td>
+                                    <div><input type="button" class="button" value="添加block" id="addPolygon"/></div>
+                                    <div><input type="button" class="button" value="删除block" id="deletePolygon"/></div>
+                                    <div><input type="button" class="button" value="编辑block开始" id="editPolygon"/></div>
+                                    <div><input type="button" class="button" value="编辑block结束" id="editEndPolygon"/></div>
+                                </td>
+                            </tr>
+                        </table>
+            </div>
+            <div class="clear"></div>
+        </div>
+<footer>
+      
+      <div style="height:20px;margin: 10px 0px; background-color: #CCC;font-size: 16px; line-height: 20px; font-weight:bold;">block 列表</div>
+      
+      <div id="blockContentList">
+         <table class="block-list-style">
+             <tr class="block-style-header">
+                 <th class="th-1">编号</th>
+                 <th class="th-2">节点坐标数组</th>
+                 <th class="th-3">block轮廓节点</th>
+                 <th class="th-4">配送区域</th>
+                 <th class="th-5">标记名</th>
+                 <th class="th-6">操作</th>
+             </tr>
+             <tr class="block-style-data">
+                 <td>1</td>
+                 <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                  <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                 <td>A</td>
+                 <td>sam-sh-A</td>
+                 <td>
+                   <a class="modify-btn overlays-btn" data-index="1">编辑</a>| <a class="delet-btn overlays-btn" data-index="1">删除</a>
+                 </td>
+             </tr>
+             <tr class="block-style-data">
+                 <td>1</td>
+                 <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                  <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                 <td>B</td>
+                 <td>sam-sh-B</td>
+                 <td>
+                    <a class="modify-btn overlays-btn" data-index="2">编辑</a>| <a class="delet-btn overlays-btn" data-index="2">删除</a>
+                 </td>
+             </tr>
+             <tr class="block-style-data">
+                 <td>1</td>
+                 <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                  <td>121.561264,31.192047, 121.502212,31.15004 ,121.522468,31.125356,<br>121.589073,31.131234</td>
+                 <td>C</td>
+                 <td>sam-sh-C</td>
+                 <td>
+                    <a class="modify-btn overlays-btn" data-index="3" data-status="open">编辑</a>| <a class="delet-btn overlays-btn" data-index="3">删除</a>
+                 </td>
+             </tr>
+         </table>
+     </div>
+</footer>     
+        <script> 
+        var map = new AMap.Map("container", {
+            resizeEnable: true
+        });	
+        //在地图中添加MouseTool插件
+        var mouseTool = new AMap.MouseTool(map);
+        var seed =0;
+        var feature,lnglat;
+        var editor={};
+        var features = [];
+        var activateFeature;
+        
+        var activateBlock={};
+        var blocks=[];
+        
+        var defaultDeliverArea = "A";
+        var defaultSignName = "sam_sh_A";
+        var defaultProvice = "sh";
+        var defaultCity = "sh";
+        
+        function uuid() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+         
+            var uuid = s.join("");
+            return uuid;
+        }
+        
+        function  fnBeginDrawFeature(){
+    			if(mouseTool.__drawListener){
+    				mouseTool.close();
+    				AMap.event.removeListener(mouseTool.__drawListener);
+    			}
+    			mouseTool.polygon();
+    			mouseTool.__drawListener = AMap.event.addListener(mouseTool, "draw", fnAfterDrawFeature);
+    	} 
+        function  fnAfterDrawFeature(e){
+    			feature = e.obj;
+    			//feature.__id = seed;
+    			if(feature instanceof AMap.Polygon){
+    				lnglat = feature.getPath();
+    				lnglat = lnglat[lnglat.length -1];
+    			}
+    			else{ throw Error("现在还不支持。");}
+    			AMap.event.removeListener(mouseTool.__drawListener);
+    			mouseTool.__drawListener = null;
+    			mouseTool.close();
+
+    			
+    			activateBlock= {};
+    			activateBlock._id  = uuid();
+    			activateBlock.feature = feature;
+    			activateBlock.deliverArea = defaultDeliverArea;
+    			activateBlock.signName = defaultSignName;
+    			activateBlock.provice = defaultProvice;
+    			activateBlock.city = defaultCity;
+    			
+    			activateBlock.editStatus="N"
+    			
+    			blocks.push(activateBlock);
+    			
+    			seed++;
+    			if(blocks.length > 0){
+    				document.getElementById('deletePolygon').disabled  = false;
+    				document.getElementById('editPolygon').disabled  = false;
+    			}
+    			
+    			map.panTo(lnglat);	
+    			console.log("path=" + feature.getPath())
+    	}
+       //给div绑定单击事件
+       AMap.event.addDomListener(document.getElementById('addPolygon'), 'click', fnBeginDrawFeature, false);
+       
+       function  fnDeleteBlock(){
+    	   
+    	    if(activateBlock.editStatus=="S"){
+    	    	alert("编辑尚未结束，暂时不能删除！！")
+    	    	return;
+    	    }
+    	    
+    	    activateBlock = blocks.pop();
+    	    feature = activateBlock.feature;
+    		feature.setMap(null);
+    	    if(blocks.length==0){
+    	    	document.getElementById('deletePolygon').disabled  = true;
+    	    	document.getElementById('editPolygon').disabled  = true;
+    	    }
+       }
+       AMap.event.addDomListener(document.getElementById('deletePolygon'), 'click', fnDeleteBlock, false);
+       
+      
+       function  fnStartEditBlock(){
+    	    activateBlock = blocks.pop();
+    	    activateBlock.editStatus="S";
+    	    
+    	    feature = activateBlock.feature;
+    		if(editor._polygonEditor){
+    			editor._polygonEditor.close();
+    		}
+    		
+    		editor._polygon=(function(){
+    	        return feature;
+    	    })();
+
+    		editor._polygonEditor= new AMap.PolyEditor(map, editor._polygon);
+    		
+    		editor._polygonEditor.open();
+    		
+    		//editor.__drawListener = AMap.event.addListener(editor._polygonEditor, "draw", fnEndEditBlock);
+    		
+    		feature.on('rightclick', function() {
+    			editor._polygonEditor.close();
+    			console.log("path=" + feature.getPath())
+    			
+    			activateBlock= {};
+    			activateBlock._id  = uuid();
+    			activateBlock.feature = feature;
+    			activateBlock.deliverArea = defaultDeliverArea;
+    			activateBlock.signName = defaultSignName;
+    			activateBlock.provice = defaultProvice;
+    			activateBlock.city = defaultCity;
+    			
+    			activateBlock.editStatus="E";
+    			
+    			blocks.push(activateBlock);
+    			
+    	    });
+    		
+       }
+       AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', fnStartEditBlock, false); 
+       
+       function  fnEndEditBlock(e){
+
+            feature = activateBlock.feature;
+    		editor._polygonEditor.close();
+    		
+    		activateBlock= {};
+    		activateBlock._id  = uuid();
+    		activateBlock.feature = feature;
+    		activateBlock.deliverArea = defaultDeliverArea;
+    		activateBlock.signName = defaultSignName;
+    		activateBlock.provice = defaultProvice;
+    		activateBlock.city = defaultCity;
+    		
+    		activateBlock.editStatus="E";
+    		
+    		blocks.push(activateBlock);
+    		
+    		console.log("path=" + feature.getPath())
+
+       }
+       
+       AMap.event.addDomListener(document.getElementById('editEndPolygon'), 'click', fnEndEditBlock, false); 
+     </script>     
+</body>
+</html>

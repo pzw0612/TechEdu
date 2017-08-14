@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+
+function openwin() { window.open ("page.html", "newwindow", "height=100, width=400, toolbar= 
+		no, menubar=no, scrollbars=no, resizable=no, location=no, status=no") 
+		file://写/成一行 
+		} 
+
+</script>
+
+</head>
+<body onload="openwin()">  
+
+</body>
+<!-- 方法一：<body onload="openwin()"> 浏览器读页面时弹出窗口；  -->
+<!-- 方法二：<body onunload="openwin()"> 浏览器离开页面时弹出窗口；  -->
+<!-- 方法三：用一个连接调用：  -->
+<!-- <a href="#" onclick="openwin()">打开一个窗口</a>  -->
+<!-- 注意：使用的“#”是虚连接。  -->
+
+
+</html>

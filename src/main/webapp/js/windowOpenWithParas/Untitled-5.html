@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>无标题文档title>
+<head>
+<script type="text/javascript">
+function aaa()
+{
+    window.opener.document.getElementByIdx('textfield').value='123123123';
+}
+</script>
+<body>
+    <form id="form1" name="form1" method="post" action="">
+           <input type="submit" name="button" id="button" value="提交"
+            onclick="aaa()" />
+        
+    form>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<writeKeysPairs xmlns="http://com.yhd.shareservice/autoclear/keyspair"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://com.yhd.shareservice/autoclear/keyspair 
+        http://com.yhd.shareservice/autoclear/keyspair/keys_pair.xsd"> 
+   <writeKeysPair>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>updateMerchant</methodName>
+       <associatedKeys>
+         <associatedKey keyId="queryBaseMerchantById" clearCacheStrategy="directlyRemove"/>
+       </associatedKeys>
+   </writeKeysPair>
+   <writeKeysPair>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>deleteMerchantAreaByMerchantId</methodName>
+       <associatedKeys>
+			<associatedKey keyId="queryProvinceIdByMerchantId"/>
+			<associatedKey keyId="queryMerchantIdAndProvinceIdByMerchantIds" />
+       </associatedKeys>
+   </writeKeysPair>
+   
+   <writeKeysPair>
+       <className>com.yhd.pss.merchant.remote.ModifyMerchantServiceRemoteImpl</className>
+       <methodName>insertMerchantArea</methodName>
+       <associatedKeys>
+			<associatedKey keyId="queryProvinceIdByMerchantId"/>
+			<associatedKey keyId="queryMerchantIdAndProvinceIdByMerchantIds"/>
+       </associatedKeys>
+   </writeKeysPair>
+   
+</writeKeysPairs>

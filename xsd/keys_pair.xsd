@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://com.yhd.shareservice/autoclear/keyspair" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://com.yhd.shareservice/autoclear/keyspair" 
+    elementFormDefault="unqualified">
+   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+   
+	<xsd:element name="writeKeysPairs">
+			<xsd:complexType>
+				   <xsd:sequence>
+				       <xsd:element ref="writeKeysPair" minOccurs="1" maxOccurs="unbounded"/>
+				   </xsd:sequence>
+			</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="writeKeysPair">
+		<xsd:complexType>
+			<xsd:sequence>
+	              <xsd:element ref="className"></xsd:element>
+	              <xsd:element ref="methodName" ></xsd:element>
+	              <xsd:element  ref="associatedKeys" minOccurs="1" maxOccurs="1"></xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="associatedKeys">
+                <xsd:complexType>
+                     <xsd:sequence>
+                           <xsd:element ref="associatedKey" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+                     </xsd:sequence>
+                </xsd:complexType>
+	</xsd:element>
+	
+	 <xsd:element name="associatedKey">
+	     <xsd:complexType>
+	          <xsd:complexContent>
+	               <xsd:extension base="identifiedType">
+	                     <xsd:group ref="associatedKeyElements" minOccurs="0" maxOccurs="1"></xsd:group>
+	                     <xsd:attributeGroup ref="associatedKeyAttr"></xsd:attributeGroup>
+	               </xsd:extension>
+	          </xsd:complexContent>
+	     </xsd:complexType>
+	 </xsd:element>
+	<xsd:complexType name="identifiedType">
+		<xsd:attribute name="keyId" type="xsd:string"></xsd:attribute>
+	</xsd:complexType>
+	
+	<xsd:attributeGroup name="associatedKeyAttr">
+           <!-- 以逗号分隔的参数 -->
+           <xsd:attribute name="affectedArgument" type="xsd:string" use="optional"></xsd:attribute>
+           <xsd:attribute name="clearCacheStrategy" type="clearCacheStrategyType" ></xsd:attribute>
+	</xsd:attributeGroup>
+	
+	<!-- 缓存清理策略 -->
+	 <xsd:simpleType name="clearCacheStrategyType">
+	     <xsd:restriction base="xsd:string">
+	         <xsd:enumeration value="directlyRemove"></xsd:enumeration>
+	         <xsd:enumeration value="updateKeyVersion"></xsd:enumeration>
+	     </xsd:restriction>
+	 </xsd:simpleType>
+ 
+ 	<xsd:group name="associatedKeyElements">
+		<xsd:sequence>
+            <xsd:element ref="argumentRetrieval"></xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+
+	<xsd:element name="className">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="methodName">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="argumentRetrieval">
+	    <xsd:complexType>
+              <xsd:choice minOccurs="1" maxOccurs="2">
+	               <xsd:element ref="sqlMapClient" minOccurs="1" maxOccurs="1"></xsd:element>
+	               <xsd:element ref="iBATISId" minOccurs="1" maxOccurs="1"></xsd:element>
+              </xsd:choice>
+	        <xsd:attribute name="type" type="typeEnum" default="input"></xsd:attribute>
+	    </xsd:complexType>
+	</xsd:element>
+	
+	 <xsd:simpleType name="typeEnum">
+	     <xsd:restriction base="xsd:string">
+	         <xsd:enumeration value="input"></xsd:enumeration>
+	         <!-- sqlMapClient,iBATISId -->
+	         <xsd:enumeration value="sql"></xsd:enumeration>
+	         <!-- sqlMapClient -->
+	         <xsd:enumeration value="code"></xsd:enumeration>
+	     </xsd:restriction>
+	 </xsd:simpleType>
+	 
+	<xsd:element name="sqlMapClient">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="iBATISId">
+		<xsd:complexType mixed="true">
+			<xsd:choice minOccurs="1" maxOccurs="1"/>
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

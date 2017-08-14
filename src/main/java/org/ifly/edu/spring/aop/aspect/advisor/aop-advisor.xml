@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beanshttp://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+  http://www.springframework.org/schema/aophttp://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+  http://www.springframework.org/schema/txhttp://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+  http://www.springframework.org/schema/contexthttp://www.springframework.org/schema/context/spring-context-3.1.xsd
+  http://www.springframework.org/schema/utilhttp://www.springframework.org/schema/util/spring-util-3.1.xsd">
+ 
+  <bean id="genericAdvisor" class="com.ruishenh.aop.aspect.advisor.GenericAdvisor"/>
+  <aop:config>
+    <!-- 定义切面 -->
+    <aop:aspect ref="genericAdvisor" order="0">
+      <!-- 定义连接点 -->
+      <aop:pointcut id="businessService" expression="execution(*com.ruishenh.business.impl..*.*(..))" />
+      <!-- 定义前置 -->
+      <aop:before method="before" pointcut-ref="businessService"/>
+      <!-- 定义环绕 -->
+      <aop:around method="heartbeat" pointcut-ref="businessService"/>
+      <!-- 定义后置 -->
+      <aop:after method="after" pointcut-ref="businessService"/>
+      <!-- 定义Target处理后普通结果增强 -->
+      <aop:after-returning method="afterReturning" pointcut-ref="businessService" returning="obj"/>
+      <!-- 定义Target处理后异常增强 -->
+      <aop:after-throwing method="handlerException" pointcut-ref="businessService" throwing="e"/>
+      
+    </aop:aspect>
+  </aop:config>
+</beans>

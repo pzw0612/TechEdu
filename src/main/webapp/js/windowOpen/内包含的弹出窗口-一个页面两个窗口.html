@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+	function openwin() {
+		OpenWindow = window.open("", "newwin",
+				"height=250, width=250,toolbar=no,scrollbars=" + scroll
+						+ ",menubar=no");
+		OpenWindow.document.write("<TITLE>例子</TITLE>")
+		OpenWindow.document.write("<BODY BGCOLOR=#ffffff>")
+		OpenWindow.document.write("<h1>Hello!</h1>")
+		OpenWindow.document.write("New window opened!")
+		OpenWindow.document.write("</BODY>")
+		OpenWindow.document.write("</HTML>")
+		OpenWindow.document.close()
+	}
+</script>
+</head>
+<body>
+	<a href="#" onclick="openwin()">打开一个窗口</a>
+	<input type="button" onclick="openwin()" value="打开窗口">
+</body>
+
+<!-- 看看 OpenWindow.document.write()里面的代码不就是标准的HTML吗？只要按照格式写更多的行即可。千万注意多一个标签或少一个标签就会出现错误。记得用OpenWindow.document.close()结束啊。 -->
+</html>
